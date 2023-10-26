@@ -2,7 +2,7 @@
 
 ![StashBlob mini logo](public/apple-touch-icon.png)
 
-[StashBlob](https://github.com/creative-tutorials/stashblob)
+### StashBlob
 
 Upload. Optimize. Share
 
