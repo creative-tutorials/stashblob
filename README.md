@@ -1,13 +1,13 @@
 <div align="center">
 
-![Alt text](public/apple-touch-icon.png)
+![StashBlob mini logo](public/apple-touch-icon.png)
 
-[StashBlob]()
+[StashBlob](https://github.com/creative-tutorials/stashblob)
 
 Upload. Optimize. Share
 
 
-[Documentation]() [Changelog]()
+[Documentation](https://post-io.gitbook.io/stashblob-docs) [Changelog](https://stashblobweb.vercel.app/changelog)
 
 </div>
 
@@ -29,11 +29,11 @@ For every files you upload, we have the power to share them with your friends an
 
 ## Contributing
 
-You feel eager to contribute on this? Seek our [Contributing Guidelines]() for more details.
+You feel eager to contribute on this? Seek our [Contributing Guidelines](/CONTRIBUTING.md) for more details.
 
 
 ## Reference
 
-- [Code of Conduct]()
-- [Contributing Guidelines]()
-- [MIT License]()
+- [Code of Conduct](/CODE_OF_CONDUCT.md)
+- [Contributing Guidelines](/CONTRIBUTING.md)
+- [MIT License](/LICENSE)
