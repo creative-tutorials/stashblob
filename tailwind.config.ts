@@ -43,6 +43,7 @@ module.exports = {
       lightpurple: "#b49efd",
       midwhite: "#DBE2EB",
       midwhite2: "#e3eef9",
+      whiteos: "#DFEAEA",
       actionpurple: "#6c47ff",
       lightgrey: "#d0d0d0",
       danger_red: "#EE1739",

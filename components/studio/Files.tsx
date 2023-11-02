@@ -24,6 +24,7 @@ import { MoreHorizontal, Forward, Trash2 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { useToast } from "../ui/use-toast";
 import { Dispatch, SetStateAction } from "react";
+import { extension } from "@/types/appx";
 
 type typeFile = {
   date: string;
@@ -37,15 +38,19 @@ type typeFile = {
 type FileProp = {
   files: never[];
   dataLoading: boolean;
+  isErr: boolean;
   fetchFiles(): Promise<void>;
   setShow: Dispatch<SetStateAction<boolean>>;
+  setExtension: Dispatch<SetStateAction<extension>>;
 };
 
 export default function Files({
   files,
   dataLoading,
+  isErr,
   fetchFiles,
   setShow,
+  setExtension,
 }: FileProp) {
   const { toast } = useToast();
   const { isSignedIn, user } = useUser();
@@ -54,6 +59,10 @@ export default function Files({
   const deleteFile = async (filename: string, uploadID: string) => {
     if (isSignedIn) {
       const id = user.id;
+      const username = user.username;
+      toast({
+        description: "Please wait...",
+      });
       axios
         .delete(`http://localhost:8080/delete/${filename}/${uploadID}`, {
           headers: {
@@ -68,7 +77,7 @@ export default function Files({
             title: "Success",
             description: response.data.message,
           });
-          await fetchFiles();
+          await resetBilling(id, username);
         })
         .catch(async function (error) {
           console.error(error.response);
@@ -79,6 +88,41 @@ export default function Files({
           });
         });
     }
+  };
+
+  async function resetBilling(userid: string, username: string | null) {
+    axios
+      .post(
+        "http://localhost:8080/reset/billing",
+        {
+          userid: userid,
+          username: username,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            apikey: process.env.NEXT_PUBLIC_API_KEY,
+          },
+        }
+      )
+      .then(async function (response) {
+        console.log(response.data);
+        await fetchFiles();
+      })
+      .catch(async function (error) {
+        console.error(error);
+      });
+  }
+
+  const OpenModal = async (filename: string, uploadID: string) => {
+    setShow(true);
+    setExtension((prev) => {
+      return {
+        ...prev,
+        filename: filename,
+        uploadID: uploadID,
+      };
+    });
   };
 
   return (
@@ -92,9 +136,11 @@ export default function Files({
         <Loader />
       ) : (
         <Table>
-          <TableCaption className="text-lightgrey/70">
-            A list of your uploaded files.
-          </TableCaption>
+          {files.length !== 0 && isErr && (
+            <TableCaption className="text-lightgrey/70">
+              A list of your uploaded files.
+            </TableCaption>
+          )}
           <TableHeader>
             <TableRow className="border border-transparent border-b-borderbtm/80 bg-[#282c34]/50 hover:bg-[#282c34]/50">
               <TableHead className="text-white">Name</TableHead>
@@ -115,7 +161,7 @@ export default function Files({
                   <TableCell
                     className="text-midwhite2"
                     onClick={() =>
-                      router.push(`/file/${item.filename}/${item.uploadID}`)
+                      router.push(`/file/${item.uploadID}`)
                     }
                   >
                     {item.filename.substring(0, 10) + "..."}
@@ -123,7 +169,7 @@ export default function Files({
                   <TableCell
                     className="text-midwhite2"
                     onClick={() =>
-                      router.push(`/file/${item.filename}/${item.uploadID}`)
+                      router.push(`/file/${item.uploadID}`)
                     }
                   >
                     {item.filetype}
@@ -132,7 +178,7 @@ export default function Files({
                   <TableCell
                     className="text-midwhite2"
                     onClick={() =>
-                      router.push(`/file/${item.filename}/${item.uploadID}`)
+                      router.push(`/file/${item.uploadID}`)
                     }
                   >
                     {item.filesize}
@@ -140,7 +186,7 @@ export default function Files({
                   <TableCell
                     className="text-midwhite2"
                     onClick={() =>
-                      router.push(`/file/${item.filename}/${item.uploadID}`)
+                      router.push(`/file/${item.uploadID}`)
                     }
                   >
                     {item.date}
@@ -157,7 +203,9 @@ export default function Files({
                         <nav className="flex flex-col gap-2">
                           <DropdownMenuItem
                             className="p-3 bg-transparent transition-colors hover:bg-hovergrey cursor-pointer select-none rounded-md text-midwhite border-none outline-none flex items-center justify-between gap-2"
-                            onClick={() => setShow(true)}
+                            onClick={() =>
+                              OpenModal(item.filename, item.uploadID)
+                            }
                           >
                             Share{" "}
                             {/* <ArrowDownToLine className="w-4 h-4" /> */}

@@ -21,12 +21,12 @@ export default function UploadSection({ uploadFile }:upxType) {
         id="upload-file"
         name="mega"
         type="file"
-        accept="image/png, image/jpg, image/jpeg, image/avif"
+        accept="image/png, image/jpg, image/jpeg, image/avif, video/mp4"
         className="hidden"
         onChange={uploadFile}
       />
       <Label htmlFor="upload-file">
-        <div className="cursor-pointer flex flex-col gap-4 items-center justify-center text-center border-2 border-dashed border-containerBG p-4 rounded-lg mt-4">
+        <div className="cursor-pointer flex flex-col gap-4 items-center justify-center text-center border-2 border-dashed border-containerBG p-4 transition-all rounded-lg hover:rounded mt-4">
           <div className="w-12 h-12 flex items-center justify-center rounded-full bg-fileicon">
             <FileUp className="w-9 h-9 text-darkerblue" />
           </div>
@@ -36,7 +36,7 @@ export default function UploadSection({ uploadFile }:upxType) {
               <span className="text-gradedtext">Browse</span> File
             </p>
             <span className="md:text-sm lg:text-sm text-xs text-hashtext">
-              Max: 20MB, Supports: PNG, JPEG, JPG, AVIF
+              Max: 20MB, Supports: PNG, JPEG, JPG, AVIF, MP4
             </span>
           </article>
         </div>

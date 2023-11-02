@@ -1,42 +1,27 @@
-import Image from "next/image";
 import Head from "next/head";
-import Link from "next/link";
+import axios from "axios";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@supabase/supabase-js";
 import { useState, useEffect, ChangeEvent, Fragment } from "react";
-import { UserButton } from "@clerk/nextjs";
 import { useUser } from "@clerk/nextjs";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+
 import { CommandBx } from "@/components/app/command-bx";
+import Header from "@/components/app/Header";
+import ModalUI from "@/components/app/modalUI";
 
-import { UploadCloud, Copy, X } from "lucide-react";
+import { Copy, X, PackageOpen } from "lucide-react";
+
 import UploadSection from "@/components/studio/uploadSection";
-
 import Files from "@/components/studio/Files";
 
-import axios from "axios";
-
-type typeCounter = number;
-
-type booleanType = boolean;
-
-type typeUpldState = {
-  isUploading: boolean;
-  props: {
-    uploading: string;
-    upload: string;
-  };
-};
-
-type supaType = {
-  projectURL: string;
-  public_anon_key: string;
-};
-
-type typeUser = string | null;
+import { extension } from "@/types/appx";
+import { supaType } from "@/types/appx";
+import { typeUpldState } from "../types/appx";
+import { typeCounter } from "@/types/appx";
+import { booleanType } from "@/types/appx";
+import { typeUser } from "@/types/appx";
 
 const supabaseProp: supaType = {
   projectURL: process.env.NEXT_PUBLIC_SUPABASE_URL as string,
@@ -54,6 +39,10 @@ export default function Home() {
   const [open, setOpen] = useState<booleanType>(false);
   const [show, setShow] = useState<booleanType>(false);
   const [files, setFiles] = useState([]);
+  const [extension, setExtension] = useState<extension>({
+    filename: "",
+    uploadID: "",
+  });
   const [uploadState, setUploadState] = useState<typeUpldState>({
     isUploading: false,
     props: {
@@ -126,10 +115,16 @@ export default function Home() {
           isUploading: true,
         };
       });
+      toast({
+        description: "Uploading...",
+      });
       // 1. create draft billing record
       await createBillingDraft(file, filename, fileSize, fileType, event)
         .then(async function (data) {
           console.log("bill intiated");
+          toast({
+            description: "Uploading...",
+          });
         })
         .catch(async function (error) {
           console.error("bill error", error);
@@ -176,6 +171,9 @@ export default function Home() {
           await intializeUpload(file, filename, fileSize, fileType, event)
             .then(async function (data) {
               console.info("upload intialized");
+              toast({
+                description: "Uploading...",
+              });
             })
             .catch(async function (error) {
               event.target.value = "";
@@ -222,6 +220,9 @@ export default function Home() {
       await uploadFileDB(filename, fileSize, fileType, event)
         .then(async function (data) {
           console.info("uploading...");
+          toast({
+            description: "Uploading...",
+          });
         })
         .catch(async function (error) {
           console.error(error);
@@ -356,54 +357,12 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
       </Head>
       <div className="">
-        <header className="fixed top-0 w-full z-10 md:p-3 md:px-10 lg:p-3 lg:px-10 p-4 bg-darkestbg/70 backdrop-blur-md border border-transparent border-b-borderbtm flex items-center justify-between">
-          <div className="">
-            <Link href="/dashboard">
-              <Image
-                src="/assets/TransparentBlob.png"
-                width={150}
-                height={42}
-                placeholder="blur"
-                className="md:w-[150px] lg:w-[150px] w-[120px]"
-                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII="
-                alt="forget logo"
-              />
-            </Link>
-          </div>
-          <nav className="flex items-center md:gap-4 lg:gap-4 gap-1">
-            {/* account */}
-            <Input
-              id="upload-file"
-              name="mega"
-              type="file"
-              accept="image/png, image/jpg, image/jpeg, image/avif"
-              className="hidden"
-              onChange={uploadFile}
-            />
-            <Label
-              htmlFor="upload-file"
-              className={`${
-                uploadState.isUploading
-                  ? "bg-royalblue/30 p-2 px-4 pointer-events-none border border-blueborder rounded text-white flex items-center gap-1"
-                  : "md:bg-royalblue lg:bg-royalblue bg-transparent md:transition-colors lg:transition-colors md:hover:bg-royalblue/60 lg:hover:bg-royalblue/60 p-2 px-4 cursor-pointer border md:border-blueborder/20 lg:border-blueborder/20 border-transparent rounded text-white flex items-center gap-1"
-              }`}
-            >
-              <UploadCloud className="md:w-auto md:h-auto lg:w-auto lg:h-auto w-6 h-6" />{" "}
-              <span className="md:block lg:block hidden">
-                {uploadState.isUploading
-                  ? uploadState.props.uploading
-                  : uploadState.props.upload}
-              </span>
-            </Label>
-            <Button
-              className="bg-white hover:bg-midwhite text-darkestbg rounded md:flex lg:flex hidden items-center gap-1"
-              onClick={() => setOpen(!open)}
-            >
-              Menu
-            </Button>
-            <UserButton />
-          </nav>
-        </header>
+        <Header
+          uploadFile={uploadFile}
+          setOpen={setOpen}
+          open={open}
+          uploadState={uploadState}
+        />
         <main>
           <div className="md:p-10 lg:p-10 md:px-14 lg:px-14 p-4 md:mt-14 lg:mt-14 mt-20">
             <div className="flex flex-col gap-2">
@@ -417,10 +376,13 @@ export default function Home() {
 
             <div className="mt-8">
               <section>
-                <article>
+                <article className="flex flex-col gap-2">
                   <h3 className="text-white md:text-2xl lg:text-2xl text-xl">
-                    Recently shared
+                    Folders
                   </h3>
+                  <span className="bg-darkbtn text-midwhite p-1 w-28 rounded-md">
+                    Not available!
+                  </span>
                 </article>
               </section>
               <UploadSection uploadFile={uploadFile} />
@@ -428,76 +390,33 @@ export default function Home() {
               <Files
                 files={files}
                 dataLoading={dataLoading}
+                isErr={isErr}
                 fetchFiles={fetchFiles}
                 setShow={setShow}
+                setExtension={setExtension}
               />
             </div>
             <Fragment>
               {files.length === 0 && isErr && (
-                <div className="mt-8 flex items-center justify-center">
-                  <div className="text-center flex-col">
+                <div className="mt-8 flex flex-col items-center justify-center">
+                  <div>
+                    <PackageOpen className="w-20 h-20 text-whiteos" />
+                  </div>
+                  <hgroup className="text-center flex-col">
                     <h2 className="text-2xl text-white">
                       No files uploaded yet
                     </h2>
                     <span className="text-sm text-white/30">
                       Upload some files to get started!
                     </span>
-                  </div>
+                  </hgroup>
                 </div>
               )}
             </Fragment>
           </div>
         </main>
         <CommandBx open={open} setOpen={setOpen} />
-        <div
-          className={
-            show
-              ? "fixed w-full h-full bg-darkmxbtn/50 backdrop-blur-md top-0 right-0 flex items-center justify-center min-h-screen transition-all opacity-1 pointer-events-auto"
-              : "fixed w-full h-full bg-darkmxbtn/50 backdrop-blur-md top-0 right-0 flex items-center justify-center min-h-screen transition-all opacity-0 pointer-events-none"
-          }
-        >
-          <div
-            className={
-              show
-                ? "w-full max-w-md rounded-lg p-4 bg-[#101013] flex flex-col gap-5 transition-all scale-1 shadow-xl"
-                : "w-full max-w-md rounded-lg p-4 bg-[#101013] flex flex-col gap-5 transition-all scale-0"
-            }
-          >
-            <header className="flex items-center justify-between">
-              <h4 className="text-white text-2xl">Share</h4>
-              <X className="text-midwhite2 cursor-pointer" onClick={() => setShow(false)} />
-            </header>
-            <section className="flex flex-col gap-2">
-              <span className="text-hashtext">Invite</span>
-              <div className="flex items-center gap-3">
-                <Input
-                  type="email"
-                  placeholder="Type emails here..."
-                  className="border border-darkbtn/30 bg-thirdprop focus:bg-darkmxbtn text-hashtext"
-                  disabled
-                />
-                <Button
-                  className="bg-royalblue hover:bg-royalglue px-7 text-white"
-                  disabled
-                >
-                  Share
-                </Button>
-              </div>
-            </section>
-            <section className="mt-8 flex flex-col gap-2">
-              <span className="text-hashtext">Get Link</span>
-              <div className="">
-                <Button
-                  variant="link"
-                  className="flex items-center gap-2 text-fileicon"
-                  onClick={() => confirm("This feature is experimental")}
-                >
-                  <Copy className="w-6 h-6" /> Copy link
-                </Button>
-              </div>
-            </section>
-          </div>
-        </div>
+        <ModalUI show={show} setShow={setShow} extension={extension} />
         <footer className="fixed bottom-0 md:hidden lg:hidden block w-full z-10 md:p-3 md:px-10 lg:p-3 lg:px-10 p-4 bg-darkestbg/70 backdrop-blur-md border border-transparent border-b-borderbtm">
           <div className="flex items-center justify-between px-2">
             <Button
@@ -513,3 +432,5 @@ export default function Home() {
     </>
   );
 }
+
+

@@ -3,12 +3,13 @@ import { useUser } from "@clerk/nextjs";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
+import ReactPlayer from "react-player";
 import { UserButton } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { Search, ChevronLeft, ArrowDownToLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, Fragment } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CommandBx } from "@/components/app/command-bx";
 import axios from "axios";
@@ -23,10 +24,17 @@ type fileProp = {
 
 export default function FileRouter() {
   const router = useRouter();
-  const { filename, uploadid } = router.query;
+  const { uploadid } = router.query;
   const { isSignedIn, user, isLoaded } = useUser();
   const [dataLoading, setDataLoading] = useState(false);
+  const [isRendered, setIsRendered] = useState(false);
   const [open, setOpen] = useState(false);
+  const [regexImg, setRegexImg] = useState(
+    /(image\/png|image\/jpg|image\/jpeg|image\/avif)$/
+  );
+  const [regexVideo, setRegexVideo] = useState(
+    /(video\/mp4|video\/webm|video\/ogg)$/
+  );
   const { toast } = useToast();
   const [counter, setCounter] = useState(0);
   const [file, setFile] = useState<fileProp>({
@@ -45,7 +53,7 @@ export default function FileRouter() {
     return () => {
       setCounter(0);
     };
-  }, [counter, filename, uploadid, isLoaded, isSignedIn]);
+  }, [counter, uploadid, isLoaded, isSignedIn]);
 
   async function previewFile() {
     setDataLoading(true);
@@ -55,19 +63,18 @@ export default function FileRouter() {
 
     if (isSignedIn) {
       const userid = user.id;
+      // console.log(userid)
       axios
-        .get(
-          `http://localhost:8080/preview/${filename}/${uploadid}/${userid}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              apikey: process.env.NEXT_PUBLIC_API_KEY,
-            },
-          }
-        )
+        .get(`http://localhost:8080/preview/${uploadid}/${userid}`, {
+          headers: {
+            "Content-Type": "application/json",
+            apikey: process.env.NEXT_PUBLIC_API_KEY,
+          },
+        })
         .then(async function (response) {
-          console.log(response.data.data);
+          console.info("returned file object");
           setDataLoading(false);
+          setIsRendered(true);
           setFile((prev: fileProp) => {
             return {
               ...prev,
@@ -75,13 +82,14 @@ export default function FileRouter() {
               name: response.data.data.filename,
               size: response.data.data.filesize,
               type: response.data.data.filetype,
-              url: response.data.data.previewLink,
             };
           });
+          await generateImage(response.data.data.filename);
         })
         .catch(async function (error) {
           console.error(error.response);
           setDataLoading(false);
+          setIsRendered(false);
           toast({
             variant: "destructive",
             title: "Error",
@@ -91,12 +99,43 @@ export default function FileRouter() {
     }
   }
 
+  async function generateImage(filename: string) {
+    axios
+      .post(
+        "http://localhost:8080/gen/file",
+        {
+          filename: filename,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            apikey: process.env.NEXT_PUBLIC_API_KEY,
+          },
+        }
+      )
+      .then(async function (response) {
+        console.info("file IV0 generated");
+        setFile((prev: fileProp) => {
+          return {
+            ...prev,
+            url: response.data.iv0,
+          };
+        });
+      })
+      .catch(async function (error) {
+        console.log(error.response);
+      });
+  }
+
   const downloadFile = async (
     name: string | string[] | undefined,
     id: string | string[] | undefined
   ) => {
     if (isSignedIn) {
       const userid = user.id;
+      toast({
+        description: "Please wait...",
+      });
       axios
         .get(`http://localhost:8080/download/${name}/${id}/${userid}`, {
           headers: {
@@ -124,6 +163,10 @@ export default function FileRouter() {
   ) => {
     if (isSignedIn) {
       const userid = user.id;
+      const username = user.username;
+      toast({
+        description: "Please wait...",
+      });
       axios
         .delete(`http://localhost:8080/delete/${name}/${id}`, {
           headers: {
@@ -138,7 +181,8 @@ export default function FileRouter() {
             title: "Success",
             description: response.data.message,
           });
-          await previewFile();
+          await resetBilling(userid, username);
+          // await previewFile();
         })
         .catch(async function (error) {
           console.error(error.response);
@@ -150,6 +194,30 @@ export default function FileRouter() {
         });
     }
   };
+
+  async function resetBilling(userid: string, username: string | null) {
+    axios
+      .post(
+        "http://localhost:8080/reset/billing",
+        {
+          userid: userid,
+          username: username,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            apikey: process.env.NEXT_PUBLIC_API_KEY,
+          },
+        }
+      )
+      .then(async function (response) {
+        console.log(response.data);
+        await previewFile();
+      })
+      .catch(async function (error) {
+        console.error(error);
+      });
+  }
 
   return (
     <>
@@ -219,7 +287,7 @@ export default function FileRouter() {
         <div className="flex items-center gap-4">
           <Link href="/dashboard">
             <Image
-              src="/assets/TransparentBlob.png"
+              src="/assets/TransparentBlob White.png"
               width={150}
               height={42}
               placeholder="blur"
@@ -232,7 +300,7 @@ export default function FileRouter() {
           <span className="text-base text-hashtext md:block lg:block hidden">
             <Link href="/dashboard">Dashboard</Link> /{" "}
             <Link href="/file">File Router</Link> /{" "}
-            <Link href={`/file/${filename}/${uploadid}`} className="text-white">
+            <Link href={`/file/${uploadid}`} className="text-white">
               {file.name ? file.name.substring(0, 10) + "...." : "shadcn.png"}
             </Link>
           </span>
@@ -240,7 +308,7 @@ export default function FileRouter() {
         <nav className="flex items-center md:gap-4 lg:gap-4 gap-3">
           {/* account */}
           <Link
-            href={`/file/${filename}/${uploadid}`}
+            href={`/file/${uploadid}`}
             className="text-white"
             onClick={(e) => {
               e.preventDefault();
@@ -250,16 +318,11 @@ export default function FileRouter() {
             <Search className="md:w-6 lg:w-6 md:h-6 lg:h-5 w-4 h-5" />
           </Link>
           <Link
-            href="/"
+            href="https://post-io.gitbook.io/stashblob-docs/"
+            target="_blank"
             className="text-white md:text-base lg:text-base text-sm"
           >
             Docs
-          </Link>
-          <Link
-            href="/"
-            className="text-white md:text-base lg:text-base text-sm"
-          >
-            Support
           </Link>
           <UserButton />
         </nav>
@@ -285,78 +348,106 @@ export default function FileRouter() {
           </div>
         </div>
       ) : (
-        <main className="mt-20 md:p-14 lg:p-14 md:px-14 lg:px-14 p-4 flex flex-col gap-4">
-          <section className="p-6 rounded-md bg-thirdprop border border-darkbtn/50 relative">
-            <div className="flex md:flex-row lg:flex-row flex-col items-stretch gap-10">
-              <div className="flex md:flex-row lg:flex-row flex-col items-stretch gap-4">
-                <Image
-                  src={
-                    file.url
-                      ? file.url
-                      : "https://qhgpubnqzskccobolzai.supabase.co/storage/v1/object/public/meta/uishadcn.jpg"
-                  }
-                  width={300}
-                  height={300}
-                  placeholder="blur"
-                  blurDataURL={
-                    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPk5ROoBwABBwCsavOgUgAAAABJRU5ErkJggg=="
-                  }
-                  alt={"Your file"}
-                  className="rounded-md"
-                />
-                <p className="text-lg text-white">
-                  {file.name
-                    ? file.name.substring(0, 10) + "...."
-                    : "shadcn.png"}
-                </p>
-              </div>
-              <Suspense fallback={<p>Loading</p>}>
-                <div className="">
-                  <article>
-                    <p className="text-hashtext">
-                      MIME Type: {file.type ? file.type : "image/png"}
+        <Fragment>
+          {isRendered ? (
+            <main className="mt-20 md:p-14 lg:p-14 md:px-14 lg:px-14 p-4 flex flex-col gap-4">
+              <section className="p-6 rounded-md bg-thirdprop border border-darkbtn/50 relative">
+                <div className="flex md:flex-row lg:flex-row flex-col items-stretch gap-10">
+                  <div className="flex md:flex-row lg:flex-row flex-col items-stretch gap-4">
+                    {file.url ? (
+                      <>
+                        {file.type.match(regexImg) && (
+                          <Image
+                            src={
+                              file.url
+                                ? file.url
+                                : "https://qhgpubnqzskccobolzai.supabase.co/storage/v1/object/public/meta/uishadcn.jpg"
+                            }
+                            width={300}
+                            height={300}
+                            placeholder="blur"
+                            blurDataURL={
+                              "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPk5ROoBwABBwCsavOgUgAAAABJRU5ErkJggg=="
+                            }
+                            alt={"Your file"}
+                            className="rounded-md"
+                          />
+                        )}
+                        {file.type.match(regexVideo) && (
+                          <video
+                            src={file.url}
+                            width={500}
+                            height={300}
+                            autoPlay
+                            muted
+                            loop
+                            controls={false}
+                            className="rounded-md"
+                          ></video>
+                        )}
+                      </>
+                    ) : (
+                      <div className="bg-darkbtnhover h-[300px] w-[300px] rounded-md animate-pulse"></div>
+                    )}
+                    <p className="text-lg text-white">
+                      {file.name
+                        ? file.name.substring(0, 10) + "...."
+                        : "shadcn.png"}
                     </p>
-                    <p className="text-hashtext">
-                      Size: {file.size ? file.size : "15.42KB"}
-                    </p>
-                    <p className="text-hashtext">
-                      Created: {file.date ? file.date : "Apr 26 2020"}
-                    </p>
-                  </article>
+                  </div>
+                  <Suspense fallback={<p>Loading</p>}>
+                    <div className="">
+                      <article>
+                        <p className="text-hashtext">
+                          MIME Type: {file.type ? file.type : "image/png"}
+                        </p>
+                        <p className="text-hashtext">
+                          Size: {file.size ? file.size : "15.42KB"}
+                        </p>
+                        <p className="text-hashtext">
+                          Created: {file.date ? file.date : "Apr 26 2020"}
+                        </p>
+                      </article>
+                    </div>
+                  </Suspense>
                 </div>
-              </Suspense>
-            </div>
-            <div className="mt-5 overflow-hidden">
-              <div className="w-full border border-transparent border-t-borderbtm absolute bottom-18 left-0"></div>
-              <div className="mt-5 flex items-end justify-end">
-                <Button
-                  className="bg-darkmxbtn border border-darkbtn text-white flex items-center gap-2 p-5"
-                  onClick={() => downloadFile(filename, uploadid)}
-                >
-                  <ArrowDownToLine /> Download
-                </Button>
-              </div>
-            </div>
-          </section>
-          <section className="p-6 rounded-md bg-thirdprop border border-[#e89797]/50 relative">
-            <hgroup className="flex flex-col gap-2">
-              <h3 className="text-[#e89797] text-2xl">Danger Zone</h3>
-              <p className="text-hashtext text-sm">
-                The file will be deleted permanently. This action is
-                irreversible and cannot be undone.
-              </p>
-            </hgroup>
-            <div className="flex items-end justify-end md:mt-auto lg:mt-auto mt-8">
-              <Button
-                variant={"destructive"}
-                className="bg-danger_red text-white hover:bg-fire"
-                onClick={() => deleteFile(filename, uploadid)}
-              >
-                Delete this file
-              </Button>
-            </div>
-          </section>
-        </main>
+                <div className="mt-5 overflow-hidden">
+                  <div className="w-full border border-transparent border-t-borderbtm absolute bottom-18 left-0"></div>
+                  <div className="mt-5 flex items-end justify-end">
+                    <Button
+                      className="bg-darkmxbtn border border-darkbtn text-white flex items-center gap-2 p-5"
+                      onClick={() => downloadFile(file.name, uploadid)}
+                    >
+                      <ArrowDownToLine /> Download
+                    </Button>
+                  </div>
+                </div>
+              </section>
+              <section className="p-6 rounded-md bg-thirdprop border border-[#e89797]/50 relative">
+                <hgroup className="flex flex-col gap-2">
+                  <h3 className="text-[#e89797] text-2xl">Danger Zone</h3>
+                  <p className="text-hashtext text-sm">
+                    The file will be deleted permanently. This action is
+                    irreversible and cannot be undone.
+                  </p>
+                </hgroup>
+                <div className="flex items-end justify-end md:mt-auto lg:mt-auto mt-8">
+                  <Button
+                    variant={"destructive"}
+                    className="bg-danger_red text-white hover:bg-fire"
+                    onClick={() => deleteFile(file.name, uploadid)}
+                  >
+                    Delete this file
+                  </Button>
+                </div>
+              </section>
+            </main>
+          ) : (
+            <main>
+              <h2>Error</h2>
+            </main>
+          )}
+        </Fragment>
       )}
       <CommandBx open={open} setOpen={setOpen} />
       <Toaster />

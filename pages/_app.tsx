@@ -14,11 +14,11 @@ export default function App({ Component, pageProps }: AppProps) {
             background: "#111113",
             // borderRadius: "5px"
           },
-          formButtonPrimary: "bg-[#7148FC] text-white hover:bg-[#7148FC]/80",
-          footerActionLink: "text-[#C084FC] hover:text-[#C084FC]/80",
-          formButtonReset: "hover:bg-[#7148FC]/30 text-[#5748AE]",
-          avatarImageActionsUpload: "text-[#5748AE]",
-          badge: "bg-[#5748AE]/40 text-[#7148FC]"
+          formButtonPrimary: "bg-[#2559c0] text-white hover:bg-[#2559c0]/80",
+          footerActionLink: "text-[#a5c5f6] hover:text-[#a5c5f6]/80",
+          formButtonReset: "hover:bg-[#2559c0]/30 text-[#fefeff]",
+          avatarImageActionsUpload: "text-[#2473c8]",
+          badge: "bg-[#2473c8]/40 text-[#f3f6fd]"
           
         },
       }}

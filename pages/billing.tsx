@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
-import { Progress } from "@/components/ui/progress";
+import { ColorRing } from "react-loader-spinner";
 import { ExternalLink, Archive } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
@@ -25,7 +25,7 @@ type typeBill = {
 };
 
 export default function Billing() {
-  const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [renderCount, setRenderCount] = useState(0);
   const [billObj, setBillObj] = useState<typeBill>({
     status: {
@@ -54,6 +54,7 @@ export default function Billing() {
     renderCount === 1 && getBillingStatus();
 
     async function getBillingStatus() {
+      setLoading(true);
       if (!isLoaded || !isSignedIn) {
         return null;
       } else {
@@ -67,6 +68,7 @@ export default function Billing() {
           })
           .then(async function (response) {
             console.log(response.data);
+            setLoading(false);
             setBillObj((prev) => {
               return {
                 ...prev,
@@ -87,6 +89,7 @@ export default function Billing() {
           })
           .catch(async function (error) {
             console.error(error.response);
+            setLoading(false);
           });
       }
     }
@@ -161,7 +164,7 @@ export default function Billing() {
         <div className="">
           <Link href="/dashboard">
             <Image
-              src="/assets/TransparentBlob.png"
+              src="/assets/TransparentBlob White.png"
               width={150}
               height={42}
               placeholder="blur"
@@ -204,64 +207,91 @@ export default function Billing() {
             Cloud Usage
           </h3>
           <div className="w-full h-full mt-4 flex flex-wrap items-stretch md:gap-14 lg:gap-14 gap-4">
-            <section className="bg-blackmid border border-hovergrey rounded-lg shadow-md p-4 w-full max-w-[43rem] h-auto flex flex-col relative">
-              <div className="flex flex-wrap md:gap-0 lg:gap-0 gap-4 items-center justify-between">
-                <hgroup className="flex gap-4">
-                  <p className="text-white text-xl font-medium">Basic Plan</p>
-                  <Badge className="bg-[#dfe9f5] text-[#3864ac] py-[0.1rem]">
-                    Monthly
-                  </Badge>
-                </hgroup>
-                <hgroup>
-                  <h2 className="text-4xl font-medium text-midwhite2">
-                    $0<span className="text-base font-normal">/month</span>
-                  </h2>
-                </hgroup>
+            {loading ? (
+              <div className="flex w-full items-center justify-center">
+                <ColorRing
+                  visible={true}
+                  height="80"
+                  width="80"
+                  ariaLabel="blocks-loading"
+                  wrapperStyle={{}}
+                  wrapperClass="blocks-wrapper"
+                  colors={[
+                    "#2559c0",
+                    "#a6a6b1",
+                    "#2473c8",
+                    "#749ae4",
+                    "#9C86E8",
+                  ]}
+                />
               </div>
-              <div className="md:mt-4 lg:mt-4 mt-6">
-                <span className="text-midwhite">
-                  {billObj.uploadUsage.used}% of 2GB used
-                </span>
-              </div>
-              <div className="mt-4 w-full h-auto">
-                <div className="absolute w-full bottom-12 right-0 bg-[#1a1b1e] h-[0.1rem]"></div>
-                <div className="mt-6 w-full flex items-end justify-end m-auto">
-                  <Link
-                    href="/"
-                    className="flex items-center gap-3 transition-all text-linkclr hover:text-fileicon hover:underline"
-                  >
-                    Upgrade plan <ExternalLink className="w-4 h-4" />
-                  </Link>
-                </div>
-              </div>
-            </section>
-            <section className="bg-blackmid border border-hovergrey rounded-lg shadow-md p-4 w-full max-w-[43rem] h-auto flex flex-col relative">
-              <div className="">
-                <hgroup className="flex gap-4">
-                  <p className="text-white text-xl font-medium">Shared Files</p>
-                  <Badge className="bg-[#dfe9f5] text-[#3864ac] py-[0.1rem]">
-                    <Archive />
-                  </Badge>
-                </hgroup>
-              </div>
-              <div className="mt-4">
-                <span className="text-midwhite flex">
-                  <h4 className="text-4xl">{billObj.sharedUsage.used}</h4> files shared
-                </span>
-              </div>
-              <div className="absolute right-0 top-0 md:block lg:block hidden">
-                <svg
-                  // width="217"
-                  // height="217"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="fill-[#80a2e718] w-44 h-44"
-                >
-                  <path d="M22 13.126A6 6 0 0 0 13.303 21H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h7.414l2 2H21a1 1 0 0 1 1 1v7.126ZM18 17v-3.5l5 4.5-5 4.5V19h-3v-2h3Z"></path>
-                </svg>
-              </div>
-            </section>
+            ) : (
+              <>
+                <section className="bg-blackmid border border-hovergrey rounded-lg shadow-md p-4 w-full max-w-[43rem] h-auto flex flex-col relative">
+                  <div className="flex flex-wrap md:gap-0 lg:gap-0 gap-4 items-center justify-between">
+                    <hgroup className="flex gap-4">
+                      <p className="text-white text-xl font-medium">
+                        Basic Plan
+                      </p>
+                      <Badge className="bg-[#dfe9f5] text-[#3864ac] py-[0.1rem]">
+                        Monthly
+                      </Badge>
+                    </hgroup>
+                    <hgroup>
+                      <h2 className="text-4xl font-medium text-midwhite2">
+                        $0<span className="text-base font-normal">/month</span>
+                      </h2>
+                    </hgroup>
+                  </div>
+                  <div className="md:mt-4 lg:mt-4 mt-6">
+                    <span className="text-midwhite">
+                      {billObj.uploadUsage.used}% of 2GB used
+                    </span>
+                  </div>
+                  <div className="mt-4 w-full h-auto">
+                    <div className="absolute w-full bottom-12 right-0 bg-[#1a1b1e] h-[0.1rem]"></div>
+                    <div className="mt-6 w-full flex items-end justify-end m-auto">
+                      <Link
+                        href="/"
+                        className="flex items-center gap-3 transition-all text-linkclr hover:text-fileicon hover:underline"
+                      >
+                        Upgrade plan <ExternalLink className="w-4 h-4" />
+                      </Link>
+                    </div>
+                  </div>
+                </section>
+                <section className="bg-blackmid border border-hovergrey rounded-lg shadow-md p-4 w-full max-w-[43rem] h-auto flex flex-col relative overflow-hidden">
+                  <div className="">
+                    <hgroup className="flex gap-4">
+                      <p className="text-white text-xl font-medium">
+                        Shared Files
+                      </p>
+                      <Badge className="bg-[#dfe9f5] text-[#3864ac] py-[0.1rem]">
+                        <Archive />
+                      </Badge>
+                    </hgroup>
+                  </div>
+                  <div className="mt-4">
+                    <span className="text-midwhite flex">
+                      <h4 className="text-4xl">{billObj.sharedUsage.used}</h4>{" "}
+                      files shared
+                    </span>
+                  </div>
+                  <div className="absolute right-0 top-0 md:block lg:block hidden">
+                    <svg
+                      // width="217"
+                      // height="217"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="fill-[#80a2e718] w-44 h-44"
+                    >
+                      <path d="M22 13.126A6 6 0 0 0 13.303 21H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h7.414l2 2H21a1 1 0 0 1 1 1v7.126ZM18 17v-3.5l5 4.5-5 4.5V19h-3v-2h3Z"></path>
+                    </svg>
+                  </div>
+                </section>
+              </>
+            )}
           </div>
         </section>
       </main>

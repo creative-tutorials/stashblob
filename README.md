@@ -6,7 +6,6 @@
 
 Upload. Optimize. Share
 
-
 [Documentation](https://post-io.gitbook.io/stashblob-docs) [Changelog](https://stashblobweb.vercel.app/changelog)
 
 </div>
@@ -30,7 +29,6 @@ For every files you upload, we have the power to share them with your friends an
 ## Contributing
 
 You feel eager to contribute on this? Seek our [Contributing Guidelines](/CONTRIBUTING.md) for more details.
-
 
 ## Reference
 
