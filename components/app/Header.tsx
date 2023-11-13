@@ -8,24 +8,41 @@ import { UserButton } from "@clerk/nextjs";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { typeUpldState } from "@/types/appx";
 
+import LightImage from "@/public/assets/TransparentBlob White.png";
+import DarkImage from "@/public/assets/TransparentBlob Color.png";
+
 type HeaderProp = {
   uploadFile: (event: ChangeEvent<HTMLInputElement>) => Promise<void>;
-  setOpen: Dispatch<SetStateAction<boolean>>
-  open: boolean
-  uploadState: typeUpldState
-}
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  open: boolean;
+  uploadState: typeUpldState;
+};
 
-export default function Header({ uploadFile, setOpen, open, uploadState }:HeaderProp) {
+export default function Header({
+  uploadFile,
+  setOpen,
+  open,
+  uploadState,
+}: HeaderProp) {
   return (
-    <header className="fixed top-0 w-full z-10 md:p-3 md:px-10 lg:p-3 lg:px-10 p-4 bg-darkestbg/70 backdrop-blur-md border border-transparent border-b-borderbtm flex items-center justify-between">
+    <header className="fixed top-0 w-full z-10 md:p-3 md:px-10 lg:p-3 lg:px-10 p-4 bg-white/30 dark:bg-darkestbg/70 backdrop-blur-md border border-transparent border-b-borderbtm/20 dark:border-b-borderbtm flex items-center justify-between">
       <div className="">
         <Link href="/dashboard">
           <Image
-            src="/assets/TransparentBlob White.png"
+            src={DarkImage}
             width={150}
             height={42}
             placeholder="blur"
-            className="md:w-[150px] lg:w-[150px] w-[120px]"
+            className="md:w-[150px] lg:w-[150px] w-[120px] block dark:hidden"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII="
+            alt="forget logo"
+          />
+          <Image
+            src={LightImage}
+            width={150}
+            height={42}
+            placeholder="blur"
+            className="md:w-[150px] lg:w-[150px] w-[120px] hidden dark:block"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII="
             alt="forget logo"
           />
@@ -57,7 +74,7 @@ export default function Header({ uploadFile, setOpen, open, uploadState }:Header
           </span>
         </Label>
         <Button
-          className="bg-white hover:bg-midwhite text-darkestbg rounded md:flex lg:flex hidden items-center gap-1"
+          className="bg-darkestbg dark:bg-darkbtn hover:bg-thirdprop hover:dark:bg-borderbtm text-white dark:text-white rounded md:flex lg:flex hidden items-center gap-1"
           onClick={() => setOpen(!open)}
         >
           Menu

@@ -3,11 +3,11 @@ import { useState, useEffect } from "react";
 import { ColorRing } from "react-loader-spinner";
 import { ExternalLink, Archive } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import Header from "@/components/app/bill/Header";
 import Link from "next/link";
-import Image from "next/image";
 import axios from "axios";
-import { UserButton } from "@clerk/nextjs";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/router";
 
 type typeBill = {
   status: {
@@ -25,6 +25,8 @@ type typeBill = {
 };
 
 export default function Billing() {
+  const router = useRouter();
+  const getPath = router.pathname;
   const [loading, setLoading] = useState(false);
   const [renderCount, setRenderCount] = useState(0);
   const [billObj, setBillObj] = useState<typeBill>({
@@ -67,7 +69,6 @@ export default function Billing() {
             },
           })
           .then(async function (response) {
-            console.log(response.data);
             setLoading(false);
             setBillObj((prev) => {
               return {
@@ -97,7 +98,7 @@ export default function Billing() {
     return () => {
       setRenderCount(0);
     };
-  }, [renderCount, isLoaded, isSignedIn, user?.id]);
+  }, [renderCount, isLoaded, isSignedIn, user?.id, getPath]);
 
   return (
     <>
@@ -160,50 +161,20 @@ export default function Billing() {
         />
         <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
       </Head>
-      <header className="fixed top-0 w-full z-10 md:p-3 md:px-10 lg:p-3 lg:px-10 p-4 bg-darkestbg/70 backdrop-blur-md border border-transparent border-b-borderbtm flex items-center justify-between">
-        <div className="">
-          <Link href="/dashboard">
-            <Image
-              src="/assets/TransparentBlob White.png"
-              width={150}
-              height={42}
-              placeholder="blur"
-              className="md:w-[150px] lg:w-[150px] w-[120px]"
-              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII="
-              alt="forget logo"
-            />
-          </Link>
-        </div>
-        <nav className="flex items-center gap-4">
-          {/* account */}
-          <Link
-            href="/dashboard"
-            className="flex items-center gap-1 text-lightgrey bg-transparent transition-colors hover:text-white p-2 rounded-md"
-          >
-            Dashboard
-          </Link>
-          <Link
-            href="/docs"
-            className="flex items-center gap-1 text-lightgrey bg-transparent transition-colors hover:text-white p-2 rounded-md"
-          >
-            Docs
-          </Link>
-          <UserButton />
-        </nav>
-      </header>
+      <Header />
       <main className="p-10 md:mt-20 lg:mt-20 mt-10">
         <section>
           <hgroup className="flex flex-col gap-4">
-            <h1 className="md:text-5xl lg:text-5xl text-4xl font-medium text-white font-Noto">
+            <h1 className="md:text-5xl lg:text-5xl text-4xl font-medium dark:text-white text-blackmid font-Noto">
               Billing
             </h1>
-            <h3 className="md:text-base lg:text-base text-sm font-normal text-white/70 font-Noto">
+            <h3 className="md:text-base lg:text-base text-sm font-normal dark:text-white/70 text-borderbtm font-Noto">
               Manage your billing and payment details.
             </h3>
           </hgroup>
         </section>
         <section className="mt-8">
-          <h3 className="md:text-3xl lg:text-3xl text-2xl font-medium text-white">
+          <h3 className="md:text-3xl lg:text-3xl text-2xl font-medium dark:text-white text-black">
             Cloud Usage
           </h3>
           <div className="w-full h-full mt-4 flex flex-wrap items-stretch md:gap-14 lg:gap-14 gap-4">
@@ -227,52 +198,52 @@ export default function Billing() {
               </div>
             ) : (
               <>
-                <section className="bg-blackmid border border-hovergrey rounded-lg shadow-md p-4 w-full max-w-[43rem] h-auto flex flex-col relative">
+                <section className="dark:bg-blackmid bg-hashtext/20 border dark:border-hovergrey border-borderbtm/20 rounded-lg shadow-md p-4 w-full max-w-[43rem] h-auto flex flex-col relative">
                   <div className="flex flex-wrap md:gap-0 lg:gap-0 gap-4 items-center justify-between">
                     <hgroup className="flex gap-4">
-                      <p className="text-white text-xl font-medium">
+                      <p className="dark:text-white text-blackmid text-xl font-medium">
                         Basic Plan
                       </p>
-                      <Badge className="bg-[#dfe9f5] text-[#3864ac] py-[0.1rem]">
+                      <Badge className="dark:bg-[#dfe9f5] bg-[#3864ac] dark:text-[#3864ac] text-[#dfe9f5] py-[0.1rem]">
                         Monthly
                       </Badge>
                     </hgroup>
                     <hgroup>
-                      <h2 className="text-4xl font-medium text-midwhite2">
+                      <h2 className="text-4xl font-medium dark:text-midwhite2 text-blackmid">
                         $0<span className="text-base font-normal">/month</span>
                       </h2>
                     </hgroup>
                   </div>
                   <div className="md:mt-4 lg:mt-4 mt-6">
-                    <span className="text-midwhite">
+                    <span className="dark:text-midwhite text-hovergrey">
                       {billObj.uploadUsage.used}% of 2GB used
                     </span>
                   </div>
                   <div className="mt-4 w-full h-auto">
-                    <div className="absolute w-full bottom-12 right-0 bg-[#1a1b1e] h-[0.1rem]"></div>
+                    <div className="absolute w-full bottom-12 right-0 dark:bg-[#1a1b1e] bg-borderbtm/20 h-[0.1rem]"></div>
                     <div className="mt-6 w-full flex items-end justify-end m-auto">
                       <Link
                         href="/"
-                        className="flex items-center gap-3 transition-all text-linkclr hover:text-fileicon hover:underline"
+                        className="flex items-center gap-3 transition-all dark:text-linkclr text-royalblue dark:hover:text-fileicon hover:text-royalglue hover:underline"
                       >
                         Upgrade plan <ExternalLink className="w-4 h-4" />
                       </Link>
                     </div>
                   </div>
                 </section>
-                <section className="bg-blackmid border border-hovergrey rounded-lg shadow-md p-4 w-full max-w-[43rem] h-auto flex flex-col relative overflow-hidden">
+                <section className="dark:bg-blackmid bg-hashtext/20 border dark:border-hovergrey border-borderbtm/20 rounded-lg shadow-md p-4 w-full max-w-[43rem] h-auto flex flex-col relative overflow-hidden">
                   <div className="">
                     <hgroup className="flex gap-4">
-                      <p className="text-white text-xl font-medium">
+                      <p className="dark:text-white text-blackmid text-xl font-medium">
                         Shared Files
                       </p>
-                      <Badge className="bg-[#dfe9f5] text-[#3864ac] py-[0.1rem]">
+                      <Badge className="dark:bg-[#dfe9f5] bg-[#3864ac] dark:text-[#3864ac] text-[#dfe9f5] py-[0.1rem]">
                         <Archive />
                       </Badge>
                     </hgroup>
                   </div>
                   <div className="mt-4">
-                    <span className="text-midwhite flex">
+                    <span className="dark:text-midwhite2 text-blackmid flex">
                       <h4 className="text-4xl">{billObj.sharedUsage.used}</h4>{" "}
                       files shared
                     </span>
@@ -284,7 +255,7 @@ export default function Billing() {
                       fill="currentColor"
                       viewBox="0 0 24 24"
                       xmlns="http://www.w3.org/2000/svg"
-                      className="fill-[#80a2e718] w-44 h-44"
+                      className="dark:fill-[#80a2e718] fill-darkbtn/30 w-44 h-44"
                     >
                       <path d="M22 13.126A6 6 0 0 0 13.303 21H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h7.414l2 2H21a1 1 0 0 1 1 1v7.126ZM18 17v-3.5l5 4.5-5 4.5V19h-3v-2h3Z"></path>
                     </svg>
@@ -298,3 +269,5 @@ export default function Billing() {
     </>
   );
 }
+
+

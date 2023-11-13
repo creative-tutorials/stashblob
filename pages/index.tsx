@@ -366,10 +366,10 @@ export default function Home() {
         <main>
           <div className="md:p-10 lg:p-10 md:px-14 lg:px-14 p-4 md:mt-14 lg:mt-14 mt-20">
             <div className="flex flex-col gap-2">
-              <h1 className="text-white md:text-3xl lg:text-3xl text-2xl font-normal">
+              <h1 className="dark:text-white text-black md:text-3xl lg:text-3xl text-2xl font-normal">
                 My Cloud
               </h1>
-              <span className="text-hashtext md:text-base lg:text-base text-sm">
+              <span className="dark:text-hashtext text-darkbtn md:text-base lg:text-base text-sm">
                 Hello {userName ? userName : "Timi"}, Welcome Back!
               </span>
             </div>
@@ -377,10 +377,10 @@ export default function Home() {
             <div className="mt-8">
               <section>
                 <article className="flex flex-col gap-2">
-                  <h3 className="text-white md:text-2xl lg:text-2xl text-xl">
+                  <h3 className="dark:text-white text-blackmid md:text-2xl lg:text-2xl text-xl">
                     Folders
                   </h3>
-                  <span className="bg-darkbtn text-midwhite p-1 w-28 rounded-md">
+                  <span className="dark:bg-darkbtn bg-hashtext text-darkmxbtn dark:text-white p-1 w-28 rounded-md">
                     Not available!
                   </span>
                 </article>
@@ -417,10 +417,10 @@ export default function Home() {
         </main>
         <CommandBx open={open} setOpen={setOpen} />
         <ModalUI show={show} setShow={setShow} extension={extension} />
-        <footer className="fixed bottom-0 md:hidden lg:hidden block w-full z-10 md:p-3 md:px-10 lg:p-3 lg:px-10 p-4 bg-darkestbg/70 backdrop-blur-md border border-transparent border-b-borderbtm">
+        <footer className="fixed bottom-0 md:hidden lg:hidden block w-full z-10 md:p-3 md:px-10 lg:p-3 lg:px-10 p-4 dark:bg-darkestbg/70 bg-white/30 backdrop-blur-md border border-transparent border-b-borderbtm">
           <div className="flex items-center justify-between px-2">
             <Button
-              className="bg-darkbtn hover:bg-darkbtnhover text-white rounded"
+              className="dark:bg-darkbtn bg-darkestbg hover:bg-darkmxbtn hover:dark:bg-darkbtnhover dark:text-white text-white rounded"
               onClick={() => setOpen(!open)}
             >
               Menu

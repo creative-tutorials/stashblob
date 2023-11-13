@@ -22,36 +22,36 @@ export function CommandBx({ open, setOpen }: CommandProp) {
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput
           placeholder="Type a command or search..."
-          className="text-white"
+          className="dark:text-white text-blackmid"
         />
         <CommandList>
-          <CommandEmpty className="text-white p-4 flex items-center justify-center">
+          <CommandEmpty className="dark:text-white text-blackmid p-4 flex items-center justify-center">
             No results found.
           </CommandEmpty>
-          <CommandGroup heading="Suggestions" className="text-white/50">
+          <CommandGroup heading="Suggestions" className="dark:text-white/50 text-hovergrey">
             <Link href="/settings/2FA">
               <CommandItem>
-                <span className="text-white text-base">Enable 2FA</span>
+                <span className="dark:text-white text-blackmid text-base">Enable 2FA</span>
               </CommandItem>
             </Link>
           </CommandGroup>
           <CommandSeparator />
-          <CommandGroup heading="App" className="text-white/50">
+          <CommandGroup heading="App" className="dark:text-white/50 text-hovergrey">
             <Link href="/profifle">
               <CommandItem>
-                <span className="text-white text-base">Profile</span>
+                <span className="dark:text-white text-blackmid text-base">Profile</span>
                 <CommandShortcut>⌘P</CommandShortcut>
               </CommandItem>
             </Link>
             <Link href="/billing">
               <CommandItem>
-                <span className="text-white text-base">Billing</span>
+                <span className="dark:text-white text-blackmid text-base">Billing</span>
                 <CommandShortcut>⌘B</CommandShortcut>
               </CommandItem>
             </Link>
             <Link href="/settings">
               <CommandItem>
-                <span className="text-white text-base">Settings</span>
+                <span className="dark:text-white text-blackmid text-base">Settings</span>
                 <CommandShortcut>⌘S</CommandShortcut>
               </CommandItem>
             </Link>

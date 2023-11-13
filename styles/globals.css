@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,6 +7,7 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  color-scheme: dark
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,13 +19,14 @@
 }
 
 body {
-  background: #1a1b1e;
+  /* background: #1a1b1e; */
+  @apply dark:bg-darkestbg bg-whitebg
   /* color: #1f1f23; */
   /* color: ; */
 }
 
 .cl-internal-b3fm6y {
-  background-color: #111113
+  background-color: #111113;
 }
 .cl-internal-rscu79 {
   color: #a5c5f6;

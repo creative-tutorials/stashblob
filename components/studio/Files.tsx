@@ -128,7 +128,7 @@ export default function Files({
   return (
     <section className="flex flex-col gap-8 mt-8">
       <article>
-        <h3 className="text-white md:text-2xl lg:text-2xl text-xl">
+        <h3 className="dark:text-white text-darkestbg md:text-2xl lg:text-2xl text-xl">
           Your files
         </h3>
       </article>
@@ -137,17 +137,17 @@ export default function Files({
       ) : (
         <Table>
           {files.length !== 0 && isErr && (
-            <TableCaption className="text-lightgrey/70">
+            <TableCaption className="dark:text-lightgrey/70 text-darkestbg">
               A list of your uploaded files.
             </TableCaption>
           )}
           <TableHeader>
-            <TableRow className="border border-transparent border-b-borderbtm/80 bg-[#282c34]/50 hover:bg-[#282c34]/50">
-              <TableHead className="text-white">Name</TableHead>
-              <TableHead className="text-white">Type</TableHead>
-              <TableHead className="text-white">Size</TableHead>
-              <TableHead className="text-white">Created</TableHead>
-              <TableHead className="text-white"></TableHead>
+            <TableRow className="border border-transparent dark:border-b-borderbtm/80 border-b-hashtext dark:bg-[#282c34]/50 bg-white hover:dark:bg-[#282c34]/50 hover:bg-white">
+              <TableHead className="dark:text-white">Name</TableHead>
+              <TableHead className="dark:text-white">Type</TableHead>
+              <TableHead className="dark:text-white">Size</TableHead>
+              <TableHead className="dark:text-white">Created</TableHead>
+              <TableHead className="dark:text-white"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -156,10 +156,10 @@ export default function Files({
               return (
                 <TableRow
                   key={item.uploadID}
-                  className="cursor-pointer border border-transparent border-b-borderbtm/80 bg-[#282c34]/50 hover:bg-[#282c34]/30"
+                  className="cursor-pointer border border-transparent dark:border-b-borderbtm/80 border-b-hashtext dark:bg-[#282c34]/50 bg-white hover:dark:bg-[#282c34]/30 hover:bg-[#bfbfbf]/20"
                 >
                   <TableCell
-                    className="text-midwhite2"
+                    className="dark:text-midwhite2 text-blackmid dark:font-normal font-medium"
                     onClick={() =>
                       router.push(`/file/${item.uploadID}`)
                     }
@@ -167,7 +167,7 @@ export default function Files({
                     {item.filename.substring(0, 10) + "..."}
                   </TableCell>
                   <TableCell
-                    className="text-midwhite2"
+                    className="dark:text-midwhite2 text-blackmid dark:font-normal font-medium"
                     onClick={() =>
                       router.push(`/file/${item.uploadID}`)
                     }
@@ -176,7 +176,7 @@ export default function Files({
                   </TableCell>
 
                   <TableCell
-                    className="text-midwhite2"
+                    className="dark:text-midwhite2 text-blackmid dark:font-normal font-medium"
                     onClick={() =>
                       router.push(`/file/${item.uploadID}`)
                     }
@@ -184,7 +184,7 @@ export default function Files({
                     {item.filesize}
                   </TableCell>
                   <TableCell
-                    className="text-midwhite2"
+                    className="dark:text-midwhite2 text-blackmid dark:font-normal font-medium"
                     onClick={() =>
                       router.push(`/file/${item.uploadID}`)
                     }
@@ -197,12 +197,12 @@ export default function Files({
                   >
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <MoreHorizontal className="cursor-pointer w-4 h-4 text-white" />
+                        <MoreHorizontal className="cursor-pointer w-4 h-4 dark:text-white text-black" />
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className="bg-[#111213] border border-darkbtn p-4 w-48 rounded-md">
+                      <DropdownMenuContent className="dark:bg-[#111213] bg-white shadow-lg dark:shadow-none border border-[#bfbfbf] dark:border-hovergrey p-4 w-48 rounded-md">
                         <nav className="flex flex-col gap-2">
                           <DropdownMenuItem
-                            className="p-3 bg-transparent transition-colors hover:bg-hovergrey cursor-pointer select-none rounded-md text-midwhite border-none outline-none flex items-center justify-between gap-2"
+                            className="p-3 bg-transparent transition-colors hover:bg-[#bfbfbf]/30 hover:dark:bg-hovergrey cursor-pointer select-none rounded-md text-blackmid dark:text-midwhite border-none outline-none flex items-center justify-between gap-2"
                             onClick={() =>
                               OpenModal(item.filename, item.uploadID)
                             }
@@ -212,7 +212,7 @@ export default function Files({
                             <Forward className="w-4 h-4" />
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            className="p-3 bg-transparent transition-colors hover:bg-hovergrey cursor-pointer select-none rounded-md text-midwhite border-none outline-none flex items-center justify-between gap-2"
+                            className="p-3 bg-transparent transition-colors hover:bg-[#bfbfbf]/30 hover:dark:bg-hovergrey cursor-pointer select-none rounded-md text-blackmid dark:text-midwhite border-none outline-none flex items-center justify-between gap-2"
                             onClick={() =>
                               deleteFile(item.filename, item.uploadID)
                             }

@@ -14,6 +14,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CommandBx } from "@/components/app/command-bx";
 import axios from "axios";
 
+import LightImage from "@/public/assets/TransparentBlob White.png";
+import DarkImage from "@/public/assets/TransparentBlob Color.png";
+
 type fileProp = {
   date: string;
   name: string;
@@ -21,6 +24,8 @@ type fileProp = {
   type: string;
   url: string;
 };
+
+// export const runtime = "nodejs"
 
 export default function FileRouter() {
   const router = useRouter();
@@ -283,24 +288,36 @@ export default function FileRouter() {
         />
         <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
       </Head>
-      <header className="fixed top-0 w-full z-10 md:p-3 md:px-10 lg:p-3 lg:px-10 p-4 bg-darkestbg/70 backdrop-blur-md border border-transparent border-b-borderbtm flex items-center justify-between">
+      <header className="fixed top-0 w-full z-10 md:p-3 md:px-10 lg:p-3 lg:px-10 p-4  dark:bg-darkestbg/70 backdrop-blur-md border border-transparent border-b-borderbtm/20 dark:border-b-borderbtm flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/dashboard">
             <Image
-              src="/assets/TransparentBlob White.png"
+              src={DarkImage}
               width={150}
               height={42}
               placeholder="blur"
-              className="md:w-[150px] lg:w-[150px] w-[120px]"
+              className="md:w-[150px] lg:w-[150px] w-[120px] block dark:hidden"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII="
+              alt="forget logo"
+            />
+            <Image
+              src={LightImage}
+              width={150}
+              height={42}
+              placeholder="blur"
+              className="md:w-[150px] lg:w-[150px] w-[120px] hidden dark:block"
               blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII="
               alt="forget logo"
             />
           </Link>
           {/* <Link href='/' className="text-lg text-hashtext"><span>Dashboard</span> / <span>File Router</span> / <span>{id}</span></Link> */}
-          <span className="text-base text-hashtext md:block lg:block hidden">
+          <span className="text-base dark:text-hashtext text-blackmid md:block lg:block hidden">
             <Link href="/dashboard">Dashboard</Link> /{" "}
             <Link href="/file">File Router</Link> /{" "}
-            <Link href={`/file/${uploadid}`} className="text-white">
+            <Link
+              href={`/file/${uploadid}`}
+              className="dark:text-white text-blackmid"
+            >
               {file.name ? file.name.substring(0, 10) + "...." : "shadcn.png"}
             </Link>
           </span>
@@ -309,7 +326,7 @@ export default function FileRouter() {
           {/* account */}
           <Link
             href={`/file/${uploadid}`}
-            className="text-white"
+            className="dark:text-white text-blackmid"
             onClick={(e) => {
               e.preventDefault();
               setOpen(true);
@@ -320,19 +337,19 @@ export default function FileRouter() {
           <Link
             href="https://post-io.gitbook.io/stashblob-docs/"
             target="_blank"
-            className="text-white md:text-base lg:text-base text-sm"
+            className="dark:text-white text-blackmid md:text-base lg:text-base text-sm"
           >
             Docs
           </Link>
           <UserButton />
         </nav>
       </header>
-      <nav className="w-full bg-thirdprop border border-transparent border-b-darkbtnhover md:p-14 lg:p-14 md:px-14 lg:px-14 p-4 md:mt-14 lg:mt-14 mt-[4.5rem]">
+      <nav className="w-full dark:bg-thirdprop bg-white border border-transparent dark:border-b-darkbtnhover border-b-borderbtm/30 md:p-14 lg:p-14 md:px-14 lg:px-14 p-4 md:mt-14 lg:mt-14 mt-[4.5rem]">
         <div className="flex items-baseline gap-3">
           <Link href="/dashboard">
-            <ChevronLeft className="text-midwhite" />
+            <ChevronLeft className="dark:text-midwhite text-black" />
           </Link>
-          <h1 className="md:text-4xl lg:text-4xl text-lg text-midwhite">
+          <h1 className="md:text-4xl lg:text-4xl text-lg dark:text-midwhite text-black">
             {file.name ? file.name.substring(0, 17) + "..." : "shadcn.png"}
           </h1>
         </div>
@@ -340,10 +357,10 @@ export default function FileRouter() {
       {dataLoading ? (
         <div className="mt-4 md:p-14 lg:p-14 md:px-14 lg:px-14 p-4">
           <div className="flex items-center space-x-4">
-            <Skeleton className="h-12 w-12 rounded-full bg-darkbtnhover" />
+            <Skeleton className="h-12 w-12 rounded-full dark:bg-darkbtnhover bg-borderbtm/30" />
             <div className="space-y-2">
-              <Skeleton className="h-4 w-[250px] bg-darkbtnhover" />
-              <Skeleton className="h-4 w-[200px] bg-darkbtnhover" />
+              <Skeleton className="h-4 w-[250px] dark:bg-darkbtnhover bg-borderbtm/30" />
+              <Skeleton className="h-4 w-[200px] dark:bg-darkbtnhover bg-borderbtm/30" />
             </div>
           </div>
         </div>
@@ -351,7 +368,7 @@ export default function FileRouter() {
         <Fragment>
           {isRendered ? (
             <main className="mt-20 md:p-14 lg:p-14 md:px-14 lg:px-14 p-4 flex flex-col gap-4">
-              <section className="p-6 rounded-md bg-thirdprop border border-darkbtn/50 relative">
+              <section className="p-6 rounded-md dark:bg-thirdprop bg-white border dark:border-darkbtn/50 border-borderbtm/20 relative">
                 <div className="flex md:flex-row lg:flex-row flex-col items-stretch gap-10">
                   <div className="flex md:flex-row lg:flex-row flex-col items-stretch gap-4">
                     {file.url ? (
@@ -389,7 +406,7 @@ export default function FileRouter() {
                     ) : (
                       <div className="bg-darkbtnhover h-[300px] w-[300px] rounded-md animate-pulse"></div>
                     )}
-                    <p className="text-lg text-white">
+                    <p className="text-lg dark:text-white text-blackmid">
                       {file.name
                         ? file.name.substring(0, 10) + "...."
                         : "shadcn.png"}
@@ -398,13 +415,13 @@ export default function FileRouter() {
                   <Suspense fallback={<p>Loading</p>}>
                     <div className="">
                       <article>
-                        <p className="text-hashtext">
+                        <p className="dark:text-hashtext text-blackmid">
                           MIME Type: {file.type ? file.type : "image/png"}
                         </p>
-                        <p className="text-hashtext">
+                        <p className="dark:text-hashtext text-blackmid">
                           Size: {file.size ? file.size : "15.42KB"}
                         </p>
-                        <p className="text-hashtext">
+                        <p className="dark:text-hashtext text-blackmid">
                           Created: {file.date ? file.date : "Apr 26 2020"}
                         </p>
                       </article>
@@ -412,10 +429,10 @@ export default function FileRouter() {
                   </Suspense>
                 </div>
                 <div className="mt-5 overflow-hidden">
-                  <div className="w-full border border-transparent border-t-borderbtm absolute bottom-18 left-0"></div>
+                  <div className="w-full border border-transparent dark:border-t-borderbtm border-t-borderbtm/30 absolute bottom-18 left-0"></div>
                   <div className="mt-5 flex items-end justify-end">
                     <Button
-                      className="bg-darkmxbtn border border-darkbtn text-white flex items-center gap-2 p-5"
+                      className="dark:bg-darkmxbtn bg-royalblue hover:bg-royalglue border border-transparent dark:border-darkbtn text-white flex items-center gap-2 p-5"
                       onClick={() => downloadFile(file.name, uploadid)}
                     >
                       <ArrowDownToLine /> Download
@@ -423,10 +440,12 @@ export default function FileRouter() {
                   </div>
                 </div>
               </section>
-              <section className="p-6 rounded-md bg-thirdprop border border-[#e89797]/50 relative">
+              <section className="p-6 rounded-md dark:bg-thirdprop bg-white border dark:border-[#e89797]/50 border-[#de3737] relative">
                 <hgroup className="flex flex-col gap-2">
-                  <h3 className="text-[#e89797] text-2xl">Danger Zone</h3>
-                  <p className="text-hashtext text-sm">
+                  <h3 className="dark:text-[#e89797] text-[#de3737] text-2xl">
+                    Danger Zone
+                  </h3>
+                  <p className="dark:text-hashtext text-secondpro text-sm">
                     The file will be deleted permanently. This action is
                     irreversible and cannot be undone.
                   </p>
