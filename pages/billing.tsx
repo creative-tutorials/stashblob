@@ -157,7 +157,7 @@ export default function Billing() {
         <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
       </Head>
       <Header />
-      <main className="p-10 md:mt-20 lg:mt-20 mt-10">
+      <main className="md:p-10 lg:p-10 p-4 mt-20">
         <section>
           <hgroup className="flex flex-col gap-4">
             <h1 className="md:text-5xl lg:text-5xl text-4xl font-medium dark:text-white text-blackmid font-Noto">

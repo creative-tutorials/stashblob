@@ -1,9 +1,7 @@
 import Head from "next/head";
 import Header from "@/components/app/bill/Header";
-import { useState } from "react";
 import { useTheme } from "next-themes";
 export default function Settings() {
-  const [mode, setMode] = useState("dark");
   const { setTheme } = useTheme()
   return (
     <>
