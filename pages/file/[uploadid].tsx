@@ -68,9 +68,8 @@ export default function FileRouter() {
 
     if (isSignedIn) {
       const userid = user.id;
-      // console.log(userid)
       axios
-        .get(`http://localhost:8080/preview/${uploadid}/${userid}`, {
+        .get(`https://s-blob.vercel.app/preview/${uploadid}/${userid}`, {
           headers: {
             "Content-Type": "application/json",
             apikey: process.env.NEXT_PUBLIC_API_KEY,
@@ -107,7 +106,7 @@ export default function FileRouter() {
   async function generateImage(filename: string) {
     axios
       .post(
-        "http://localhost:8080/gen/file",
+        "https://s-blob.vercel.app/gen/file",
         {
           filename: filename,
         },
@@ -142,7 +141,7 @@ export default function FileRouter() {
         description: "Please wait...",
       });
       axios
-        .get(`http://localhost:8080/download/${name}/${id}/${userid}`, {
+        .get(`https://s-blob.vercel.app/download/${name}/${id}/${userid}`, {
           headers: {
             "Content-Type": "application/json",
             apikey: process.env.NEXT_PUBLIC_API_KEY,
@@ -173,7 +172,7 @@ export default function FileRouter() {
         description: "Please wait...",
       });
       axios
-        .delete(`http://localhost:8080/delete/${name}/${id}`, {
+        .delete(`https://s-blob.vercel.app/delete/${name}/${id}`, {
           headers: {
             "Content-Type": "application/json",
             apikey: process.env.NEXT_PUBLIC_API_KEY,
@@ -187,7 +186,6 @@ export default function FileRouter() {
             description: response.data.message,
           });
           await resetBilling(userid, username);
-          // await previewFile();
         })
         .catch(async function (error) {
           console.error(error.response);
@@ -203,7 +201,7 @@ export default function FileRouter() {
   async function resetBilling(userid: string, username: string | null) {
     axios
       .post(
-        "http://localhost:8080/reset/billing",
+        "https://s-blob.vercel.app/reset/billing",
         {
           userid: userid,
           username: username,

@@ -45,11 +45,6 @@ export default function Billing() {
   });
   const { isSignedIn, user, isLoaded } = useUser();
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => setProgress(3), 500);
-  //   return () => clearTimeout(timer);
-  // }, []);
-
   useEffect(() => {
     setRenderCount((prev) => prev + 1);
 
@@ -62,7 +57,7 @@ export default function Billing() {
       } else {
         const userid = user.id;
         axios
-          .get(`http://localhost:8080/billing/${userid}`, {
+          .get(`https://s-blob.vercel.app/billing/${userid}`, {
             headers: {
               "Content-Type": "application/json",
               apikey: process.env.NEXT_PUBLIC_API_KEY,

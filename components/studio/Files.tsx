@@ -64,7 +64,7 @@ export default function Files({
         description: "Please wait...",
       });
       axios
-        .delete(`http://localhost:8080/delete/${filename}/${uploadID}`, {
+        .delete(`https://s-blob.vercel.app/delete/${filename}/${uploadID}`, {
           headers: {
             "Content-Type": "application/json",
             apikey: process.env.NEXT_PUBLIC_API_KEY,
@@ -93,7 +93,7 @@ export default function Files({
   async function resetBilling(userid: string, username: string | null) {
     axios
       .post(
-        "http://localhost:8080/reset/billing",
+        "https://s-blob.vercel.app/reset/billing",
         {
           userid: userid,
           username: username,
@@ -208,7 +208,6 @@ export default function Files({
                             }
                           >
                             Share{" "}
-                            {/* <ArrowDownToLine className="w-4 h-4" /> */}
                             <Forward className="w-4 h-4" />
                           </DropdownMenuItem>
                           <DropdownMenuItem

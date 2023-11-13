@@ -11,7 +11,7 @@ import { CommandBx } from "@/components/app/command-bx";
 import Header from "@/components/app/Header";
 import ModalUI from "@/components/app/modalUI";
 
-import { Copy, X, PackageOpen } from "lucide-react";
+import { PackageOpen } from "lucide-react";
 
 import UploadSection from "@/components/studio/uploadSection";
 import Files from "@/components/studio/Files";
@@ -73,7 +73,7 @@ export default function Home() {
       const id = user.id;
       setuserName(user.fullName);
       axios
-        .get(`http://localhost:8080/files/${id}`, {
+        .get(`https://s-blob.vercel.app/files/${id}`, {
           headers: {
             "Content-Type": "application/json",
             apikey: process.env.NEXT_PUBLIC_API_KEY,
@@ -155,7 +155,7 @@ export default function Home() {
     } else {
       axios
         .post(
-          "http://localhost:8080/initiate/billing",
+          "https://s-blob.vercel.app/initiate/billing",
           {
             userid: user.id,
             username: user.username,
@@ -185,7 +185,6 @@ export default function Home() {
               });
             });
           return "bill intiated";
-          // console.log("response back", response.data);
         })
         .catch(async function (error) {
           console.error(error.response);
@@ -241,7 +240,7 @@ export default function Home() {
     } else {
       axios
         .post(
-          "http://localhost:8080/upload",
+          "https://s-blob.vercel.app/upload",
           {
             filename: name,
             size: size,

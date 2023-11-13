@@ -14,7 +14,7 @@ type ModalProp = {
 };
 
 export default function ModalUI({ show, setShow, extension }:ModalProp) {
-  const { isLoaded, isSignedIn, user } = useUser();
+  const { isSignedIn, user } = useUser();
   const { toast } = useToast();
   const getShareLink = async () => {
     if (!isSignedIn) {
@@ -27,14 +27,13 @@ export default function ModalUI({ show, setShow, extension }:ModalProp) {
         description: "Please wait...",
       });
       axios
-        .get(`http://localhost:8080/share/${filename}/${uploadID}/${id}`, {
+        .get(`https://s-blob.vercel.app/share/${filename}/${uploadID}/${id}`, {
           headers: {
             "Content-Type": "application/json",
             apikey: process.env.NEXT_PUBLIC_API_KEY,
           },
         })
         .then(async function (response) {
-          // console.log(response.data);
           const url: string = response.data.message;
           await copyTextToClipboard(url)
             .then(async function (data) {
