@@ -3,9 +3,16 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { UploadCloud } from "lucide-react";
+import { UploadCloud, Command } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { isMobile } from "react-device-detect";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useState,
+  useEffect,
+} from "react";
 import { typeUpldState } from "@/types/appx";
 
 import LightImage from "@/public/assets/TransparentBlob White.png";
@@ -24,6 +31,19 @@ export default function Header({
   open,
   uploadState,
 }: HeaderProp) {
+  const [count, setCount] = useState(0);
+  const [isMobileUse, setIsMobileUse] = useState(false);
+
+  useEffect(() => {
+    setCount((prev) => prev + 1);
+
+    count === 1 && setIsMobileUse(isMobile);
+
+    return () => {
+      setCount(0);
+    };
+  }, [count]);
+
   return (
     <header className="fixed top-0 w-full z-10 md:p-3 md:px-10 lg:p-3 lg:px-10 p-4 bg-white/30 dark:bg-darkestbg/70 backdrop-blur-md border border-transparent border-b-borderbtm/20 dark:border-b-borderbtm flex items-center justify-between">
       <div className="">
@@ -48,7 +68,7 @@ export default function Header({
           />
         </Link>
       </div>
-      <nav className="flex items-center md:gap-4 lg:gap-4 gap-1">
+      <nav className="flex items-center md:gap-4 lg:gap-4 gap-3">
         {/* account */}
         <Input
           id="upload-file"
@@ -62,8 +82,8 @@ export default function Header({
           htmlFor="upload-file"
           className={`${
             uploadState.isUploading
-              ? "bg-royalblue/30 p-2 px-4 pointer-events-none border border-blueborder rounded text-white flex items-center gap-1"
-              : "md:bg-royalblue lg:bg-royalblue bg-transparent md:transition-colors lg:transition-colors md:hover:bg-royalblue/60 lg:hover:bg-royalblue/60 p-2 px-4 cursor-pointer border md:border-blueborder/20 lg:border-blueborder/20 border-transparent rounded text-white flex items-center gap-1"
+              ? "bg-royalblue/30 p-2 md:px-4 lg:px-4 px-2 pointer-events-none border border-blueborder rounded text-white flex items-center gap-1"
+              : "md:bg-royalblue lg:bg-royalblue bg-transparent md:transition-colors lg:transition-colors md:hover:bg-royalblue/60 lg:hover:bg-royalblue/60 p-2 md:px-4 lg:px-4 px-2  cursor-pointer border md:border-blueborder/20 lg:border-blueborder/20 border-transparent rounded text-white flex items-center gap-1"
           }`}
         >
           <UploadCloud className="md:w-auto md:h-auto lg:w-auto lg:h-auto w-6 h-6" />{" "}
@@ -73,12 +93,16 @@ export default function Header({
               : uploadState.props.upload}
           </span>
         </Label>
-        <Button
-          className="bg-darkestbg dark:bg-darkbtn hover:bg-thirdprop hover:dark:bg-borderbtm text-white dark:text-white rounded md:flex lg:flex hidden items-center gap-1"
-          onClick={() => setOpen(!open)}
-        >
-          Menu
-        </Button>
+        {isMobileUse ? (
+          <Command className="cursor-pointer" onClick={() => setOpen(!open)} />
+        ) : (
+          <Button
+            className="bg-darkestbg dark:bg-darkbtn hover:bg-thirdprop hover:dark:bg-borderbtm text-white dark:text-white rounded items-center gap-1"
+            onClick={() => setOpen(!open)}
+          >
+            Menu
+          </Button>
+        )}
         <UserButton />
       </nav>
     </header>

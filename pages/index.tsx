@@ -416,7 +416,7 @@ export default function Home() {
         </main>
         <CommandBx open={open} setOpen={setOpen} />
         <ModalUI show={show} setShow={setShow} extension={extension} />
-        <footer className="fixed bottom-0 md:hidden lg:hidden block w-full z-10 md:p-3 md:px-10 lg:p-3 lg:px-10 p-4 dark:bg-darkestbg/70 bg-white/30 backdrop-blur-md border border-transparent border-b-borderbtm">
+        {/* <footer className="fixed bottom-0 md:hidden lg:hidden block w-full z-10 md:p-3 md:px-10 lg:p-3 lg:px-10 p-4 dark:bg-darkestbg/70 bg-white/30 backdrop-blur-md border border-transparent border-b-borderbtm">
           <div className="flex items-center justify-between px-2">
             <Button
               className="dark:bg-darkbtn bg-darkestbg hover:bg-darkmxbtn hover:dark:bg-darkbtnhover dark:text-white text-white rounded"
@@ -425,7 +425,7 @@ export default function Home() {
               Menu
             </Button>
           </div>
-        </footer>
+        </footer> */}
       </div>
       <Toaster />
     </>
