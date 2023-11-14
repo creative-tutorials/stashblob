@@ -19,3 +19,5 @@ export type supaType = {
 };
 
 export type typeUser = string | null;
+
+export type searchQuery = string;

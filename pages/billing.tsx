@@ -1,7 +1,8 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import { ColorRing } from "react-loader-spinner";
-import { ExternalLink, Archive } from "lucide-react";
+import { ExternalLink, Archive, CreditCard, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/app/bill/Header";
 import Link from "next/link";
@@ -28,7 +29,10 @@ export default function Billing() {
   const router = useRouter();
   const getPath = router.pathname;
   const [loading, setLoading] = useState(false);
+  const [isrendering, setIsrendering] = useState(false);
+  const [isRendered, setIsRendered] = useState(false);
   const [renderCount, setRenderCount] = useState(0);
+  const [isBtnClicked, setIsBtnClicked] = useState(false);
   const [billObj, setBillObj] = useState<typeBill>({
     status: {
       hasPaid: false,
@@ -52,6 +56,7 @@ export default function Billing() {
 
     async function getBillingStatus() {
       setLoading(true);
+      setIsRendered(false);
       if (!isLoaded || !isSignedIn) {
         return null;
       } else {
@@ -65,6 +70,13 @@ export default function Billing() {
           })
           .then(async function (response) {
             setLoading(false);
+            setTimeout(() => {
+              setIsrendering(true);
+            }, 1000);
+            setTimeout(() => {
+              setIsrendering(false);
+              setIsRendered(true);
+            }, 2000);
             setBillObj((prev) => {
               return {
                 ...prev,
@@ -86,6 +98,7 @@ export default function Billing() {
           .catch(async function (error) {
             console.error(error.response);
             setLoading(false);
+            setIsRendered(false);
           });
       }
     }
@@ -200,7 +213,7 @@ export default function Billing() {
                         Basic Plan
                       </p>
                       <Badge className="dark:bg-[#dfe9f5] bg-[#3864ac] dark:text-[#3864ac] text-[#dfe9f5] py-[0.1rem]">
-                        Monthly
+                        Free
                       </Badge>
                     </hgroup>
                     <hgroup>
@@ -218,7 +231,8 @@ export default function Billing() {
                     <div className="absolute w-full bottom-12 right-0 dark:bg-[#1a1b1e] bg-borderbtm/20 h-[0.1rem]"></div>
                     <div className="mt-6 w-full flex items-end justify-end m-auto">
                       <Link
-                        href="/"
+                        href="https://timilab.lemonsqueezy.com/checkout"
+                        target="_blank"
                         className="flex items-center gap-3 transition-all dark:text-linkclr text-royalblue dark:hover:text-fileicon hover:text-royalglue hover:underline"
                       >
                         Upgrade plan <ExternalLink className="w-4 h-4" />
@@ -260,9 +274,59 @@ export default function Billing() {
             )}
           </div>
         </section>
+        {isrendering && (
+          <div className="flex mt-8 w-full items-center justify-center">
+            <ColorRing
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="blocks-loading"
+              wrapperStyle={{}}
+              wrapperClass="blocks-wrapper"
+              colors={["#2559c0", "#a6a6b1", "#2473c8", "#749ae4", "#9C86E8"]}
+            />
+          </div>
+        )}
+        {isRendered && (
+          <section className="mt-8">
+            <div id="payitems" className="flex flex-col gap-4">
+              <hgroup className="flex flex-col gap-2">
+                <h2 className="text-3xl font-medium dark:text-white text-blackmid">
+                  Payment methods
+                </h2>
+                <p className="dark:text-white/70 text-borderbtm">
+                  You can add a payment method to have your subscription renewed
+                  automatically.
+                </p>
+              </hgroup>
+              <div id="paymentgroup">
+                <Button
+                  className="flex items-center gap-2 border border-royalblue hover:border-containerBG"
+                  onClick={() => setIsBtnClicked(true)}
+                >
+                  <CreditCard /> Add credit / debit card
+                </Button>
+              </div>
+              <div id="paystatus">
+                <span>You have no saved payment methods.</span>
+              </div>
+            </div>
+          </section>
+        )}
+        {isBtnClicked && (
+          <div className="w-full h-screen absolute top-0 left-0 bg-thirdprop/30 backdrop-blur-md">
+            <div className="absolute right-10 top-24 z-10" onClick={() => setIsBtnClicked(false)} >
+              <X className="w-8 h-8 text-white cursor-pointer" />
+            </div>
+            <div className="flex items-center justify-center h-full">
+            <iframe
+              src="https://timilab.lemonsqueezy.com/checkout/buy/47120f93-803e-435d-89bd-441482dca0e8?embed=1&dark=1"
+              className="x w-full max-w-lg md:h-full lg:h-full h-[30rem]"
+            ></iframe>
+            </div>
+          </div>
+        )}
       </main>
     </>
   );
 }
-
-

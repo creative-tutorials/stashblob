@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { UploadCloud, Command } from "lucide-react";
+import { UploadCloud, Command, Search } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import { isMobile } from "react-device-detect";
 import {
@@ -23,6 +23,7 @@ type HeaderProp = {
   setOpen: Dispatch<SetStateAction<boolean>>;
   open: boolean;
   uploadState: typeUpldState;
+  setSearchQ: Dispatch<SetStateAction<string>>;
 };
 
 export default function Header({
@@ -30,6 +31,7 @@ export default function Header({
   setOpen,
   open,
   uploadState,
+  setSearchQ
 }: HeaderProp) {
   const [count, setCount] = useState(0);
   const [isMobileUse, setIsMobileUse] = useState(false);
@@ -46,8 +48,8 @@ export default function Header({
 
   return (
     <header className="fixed top-0 w-full z-10 md:p-3 md:px-10 lg:p-3 lg:px-10 p-4 bg-white/30 dark:bg-darkestbg/70 backdrop-blur-md border border-transparent border-b-borderbtm/20 dark:border-b-borderbtm flex items-center justify-between">
-      <div className="">
-        <Link href="/dashboard">
+      <div className="flex items-center gap-3">
+        <Link href="/dashboard" className="">
           <Image
             src={DarkImage}
             width={150}
@@ -67,6 +69,13 @@ export default function Header({
             alt="forget logo"
           />
         </Link>
+        <span className="relative md:block lg:block hidden">
+        <Search className="w-4 h-4 absolute top-3 left-3 text-hashtext" />
+        <Input type="text" placeholder="Search drive" className="x border-2 border-transparent w-96 p-4 px-10 bg-[#282a2f] focus:bg-transparent focus:border-containerBG placeholder:text-hashtext" onChange={(e) => setSearchQ(e.target.value) } />
+        </span>
+
+      </div>
+      <div className="">
       </div>
       <nav className="flex items-center md:gap-4 lg:gap-4 gap-3">
         {/* account */}

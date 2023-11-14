@@ -16,7 +16,7 @@ import { PackageOpen } from "lucide-react";
 import UploadSection from "@/components/studio/uploadSection";
 import Files from "@/components/studio/Files";
 
-import { extension } from "@/types/appx";
+import { extension, searchQuery } from "@/types/appx";
 import { supaType } from "@/types/appx";
 import { typeUpldState } from "../types/appx";
 import { typeCounter } from "@/types/appx";
@@ -52,8 +52,9 @@ export default function Home() {
   });
   const [dataLoading, setDataLoading] = useState<booleanType>(false);
   const [userName, setuserName] = useState<typeUser>("");
+  const [q, setQ] = useState<searchQuery>("")
+  const [searchQ, setSearchQ] = useState<searchQuery>("")
   const [isErr, setIsErr] = useState<booleanType>(false);
-  const [isProd, setIsProd] = useState<booleanType>(false);
   const [counter, setCounter] = useState<typeCounter>(0);
 
   useEffect(() => {
@@ -361,6 +362,7 @@ export default function Home() {
           setOpen={setOpen}
           open={open}
           uploadState={uploadState}
+          setSearchQ={setSearchQ}
         />
         <main>
           <div className="md:p-10 lg:p-10 md:px-14 lg:px-14 p-4 md:mt-14 lg:mt-14 mt-20">
@@ -388,6 +390,7 @@ export default function Home() {
 
               <Files
                 files={files}
+                searchQ={searchQ}
                 dataLoading={dataLoading}
                 isErr={isErr}
                 fetchFiles={fetchFiles}

@@ -42,6 +42,7 @@ type FileProp = {
   fetchFiles(): Promise<void>;
   setShow: Dispatch<SetStateAction<boolean>>;
   setExtension: Dispatch<SetStateAction<extension>>;
+  searchQ: string;
 };
 
 export default function Files({
@@ -51,10 +52,18 @@ export default function Files({
   fetchFiles,
   setShow,
   setExtension,
+  searchQ
 }: FileProp) {
   const { toast } = useToast();
   const { isSignedIn, user } = useUser();
   const router = useRouter();
+
+  const filteredFile = files.filter((file:typeFile) => {
+    const lowercaseSearch = searchQ.toLowerCase()
+    const lowercasedFilename = file.filename.toLowerCase();
+    const uppercasedFilename = file.filename.toUpperCase();
+    return lowercasedFilename.includes(lowercaseSearch) || uppercasedFilename.includes(lowercaseSearch);
+  })
 
   const deleteFile = async (filename: string, uploadID: string) => {
     if (isSignedIn) {
@@ -151,8 +160,7 @@ export default function Files({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {files.map((item: typeFile, index: number) => {
-              const editedFile = item.filename;
+            {filteredFile.map((item: typeFile, index: number) => {
               return (
                 <TableRow
                   key={item.uploadID}
