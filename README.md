@@ -8,7 +8,7 @@ Upload. Optimize. Share
 
 [Documentation](https://post-io.gitbook.io/stashblob-docs) [Changelog](https://stashblobweb.vercel.app/changelog)
 
-https://github.com/creative-tutorials/stashblob/assets/68476321/d0b6c49f-844d-4a44-b416-a0ceb26b3efc
+<video src="https://github.com/creative-tutorials/stashblob/assets/68476321/d0b6c49f-844d-4a44-b416-a0ceb26b3efc" muted autoplay loop />
 
 ---
 
