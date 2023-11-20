@@ -1,0 +1,65 @@
+name: 📄 Documentation
+description: Fix / Update the docs
+title: "[Docs]: <description>"
+labels: ["documentation", "to fix", "good first issue"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If there's a problem with the docs, we trust you can fix it. Thanks in advance for taking your time to check out the issue.
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. skywalker@email.com
+    validations:
+      required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Description
+      description: A brief description of the issue and what went wrong
+      placeholder: Tell us what you see!
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: docs-version
+    attributes:
+    label: Docs Version
+    description: specify the docuementation version number
+    placeholder: Sepcify the version-number of the documentation this issue occured. Ex; v2
+    render: shell
+    validations:
+    required: true
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browsers are you seeing the problem on?
+      description: Tell us what you see!
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
+        - Brave
+        - All
+    validations:
+      required: true
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Please add screenshots if applicable
+      placeholder: Screenshot
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/creative-tutorials/stashblob/blob/master/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
