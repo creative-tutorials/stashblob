@@ -29,12 +29,12 @@ body:
   - type: textarea
     id: docs-version
     attributes:
-    label: Docs Version
-    description: specify the docuementation version number
-    placeholder: Sepcify the version-number of the documentation this issue occured. Ex; v2
-    render: shell
+      label: Docs Version
+      description: specify the documentation version number
+      placeholder: Specify the version number of the documentation this issue occurred. Ex; v2
+      render: shell
     validations:
-    required: true
+      required: true
   - type: dropdown
     id: browsers
     attributes:
