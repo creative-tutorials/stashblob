@@ -38,6 +38,8 @@ body:
         - Microsoft Edge
         - Brave
         - All
+    validations:
+      required: true
   - type: textarea
     id: screenshots
     attributes:
