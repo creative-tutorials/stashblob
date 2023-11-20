@@ -35,20 +35,6 @@ body:
       render: shell
     validations:
       required: true
-  - type: dropdown
-    id: browsers
-    attributes:
-      label: What browsers are you seeing the problem on?
-      description: Tell us what you see!
-      options:
-        - Firefox
-        - Chrome
-        - Safari
-        - Microsoft Edge
-        - Brave
-        - All
-    validations:
-      required: true
   - type: textarea
     id: screenshots
     attributes:
