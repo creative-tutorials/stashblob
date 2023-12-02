@@ -8,6 +8,11 @@ const nextConfig = {
         destination: "/dashboard",
         permanent: true,
       },
+      {
+        source: "/status",
+        destination: "https://stashblob.instatus.com/",
+        permanent: false,
+      },
     ];
   },
   async rewrites() {
@@ -15,6 +20,10 @@ const nextConfig = {
       {
         source: "/dashboard",
         destination: "/",
+      },
+      {
+        source: "/docs",
+        destination: "https://timi.gitbook.io/stashblob-docs/",
       },
     ];
   },
@@ -27,7 +36,6 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
-    // domains: ["qhgpubnqzskccobolzai.supabase.co", "cloud.appwrite.io"],
   },
 };
 

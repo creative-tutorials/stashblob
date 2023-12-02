@@ -7,7 +7,7 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
-  color-scheme: dark
+  color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,7 +22,7 @@ body {
   /* background: #1a1b1e; */
   @apply dark:bg-darkestbg bg-whitebg
   /* color: #1f1f23; */
-  /* color: ; */
+  /* color: ; */;
 }
 
 .cl-internal-b3fm6y {
@@ -33,4 +33,63 @@ body {
 }
 .cl-internal-enrgi0 path {
   fill: #a5c5f6;
+}
+:where(.css-dev-only-do-not-override-2q8sxy).ant-pagination
+  .ant-pagination-item
+  a {
+  color: white;
+}
+:where(.css-dev-only-do-not-override-2q8sxy).ant-pagination
+  .ant-pagination-disabled
+  .ant-pagination-item-link,
+:where(.css-dev-only-do-not-override-2q8sxy).ant-pagination
+  .ant-pagination-disabled:hover
+  .ant-pagination-item-link {
+  color: white;
+}
+:where(.css-dev-only-do-not-override-2q8sxy).ant-pagination
+  .ant-pagination-prev
+  .ant-pagination-item-link,
+:where(.css-dev-only-do-not-override-2q8sxy).ant-pagination
+  .ant-pagination-next
+  .ant-pagination-item-link {
+  color: white;
+}
+.ant-pagination-item.ant-pagination-item-active {
+  background-color: #393c44;
+  border-color: #7048fc;
+}
+:where(.css-dev-only-do-not-override-2q8sxy).ant-table-wrapper
+  .ant-table-thead
+  > tr
+  > th,
+:where(.css-dev-only-do-not-override-2q8sxy).ant-table-wrapper
+  .ant-table-thead
+  > tr
+  > td {
+  background-color: #0e0e10;
+  color: white;
+}
+:where(.css-dev-only-do-not-override-2q8sxy)[class^="ant-table"]
+  [class^="ant-table"],
+:where(.css-dev-only-do-not-override-2q8sxy)[class*=" ant-table"]
+  [class^="ant-table"],
+:where(.css-dev-only-do-not-override-2q8sxy)[class^="ant-table"]
+  [class*=" ant-table"],
+:where(.css-dev-only-do-not-override-2q8sxy)[class*=" ant-table"]
+  [class*=" ant-table"] {
+  background-color: #0e0e10;
+  color: white;
+}
+:where(.css-dev-only-do-not-override-2q8sxy).ant-table-wrapper
+  .ant-table-tbody
+  .ant-table-row
+  > .ant-table-cell-row-hover {
+  background: #1f1f23;
+}
+:where(.css-dev-only-do-not-override-2q8sxy).ant-table-wrapper
+  .ant-table-tbody
+  .ant-table-row.ant-table-row-selected
+  > .ant-table-cell {
+  background: #2c2c30;
 }

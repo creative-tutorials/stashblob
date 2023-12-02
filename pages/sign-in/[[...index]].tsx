@@ -5,7 +5,7 @@ export default function Page() {
   return (
     <>
       <Head>
-        <title>stashblob</title>
+        <title>Login to StashBlob</title>
         <meta
           name="description"
           content="Easy way to share files with anyone without any hicups. Just upload and share."
@@ -21,14 +21,14 @@ export default function Page() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta property="og:url" content="https://stashblobweb.vercel.app" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="stashblob" />
+        <meta property="og:title" content="Login to StashBlob" />
         <meta
           property="og:description"
           content="Easy way to share files with anyone without any hicups. Just upload and share."
         />
         <meta
           property="og:image"
-          content="https://res.cloudinary.com/derbreilm/image/upload/v1697331302/Site_Rollup_pmxaos.jpg"
+          content="https://res.cloudinary.com/derbreilm/image/upload/v1700921113/Site_Rollup_pk7dop.jpg"
         />
 
         <meta name="twitter:card" content="summary_large_image" />
@@ -37,14 +37,14 @@ export default function Page() {
           property="twitter:url"
           content="https://stashblobweb.vercel.app"
         />
-        <meta name="twitter:title" content="stashblob" />
+        <meta name="twitter:title" content="Login to StashBlob" />
         <meta
           name="twitter:description"
           content="Easy way to share files with anyone without any hicups. Just upload and share."
         />
         <meta
           name="twitter:image"
-          content="https://res.cloudinary.com/derbreilm/image/upload/v1697331302/Site_Rollup_pmxaos.jpg"
+          content="https://res.cloudinary.com/derbreilm/image/upload/v1700921113/Site_Rollup_pk7dop.jpg"
         />
 
         <link

@@ -2,7 +2,6 @@ import "@/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Analytics } from '@vercel/analytics/react';
 import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -35,7 +34,6 @@ export default function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </ClerkProvider>
       </ThemeProvider>
-      <Analytics />
     </>
   );
 }

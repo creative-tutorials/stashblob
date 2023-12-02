@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import { booleanType } from "@/types/appx";
 import { CommandBx } from "../command-bx";
 
-export default function Header() {
+export function Header() {
   const router = useRouter();
   const getPath = router.pathname;
   const [count, setCount] = useState(0);
@@ -53,21 +53,20 @@ export default function Header() {
           </Link>
         </div>
         <nav className="flex items-center md:gap-4 lg:gap-4">
-          {/* account */}
           {isMobileUse ? (
             <Command className="x mr-4" onClick={() => setOpen(!open)} />
           ) : (
             <>
               <Link
                 href="/dashboard"
-                className="flex items-center gap-1 text-blackmid dark:text-lightgrey bg-transparent transition-colors hover:text-thirdprop hover:dark:text-white p-2 rounded-md"
+                className="text-blackmid dark:text-white bg-transparent transition-colors hover:text-purplebtn text-lg font-medium"
               >
                 Dashboard
               </Link>
               {getPath === "/billing" ? (
                 <Link
                   href="/settings"
-                  className="flex items-center gap-1 text-blackmid dark:text-lightgrey bg-transparent transition-colors hover:text-thirdprop hover:dark:text-white p-2 rounded-md"
+                  className="text-blackmid dark:text-white bg-transparent transition-colors hover:text-purplebtn text-lg font-medium"
                 >
                   Settings
                 </Link>
@@ -75,7 +74,7 @@ export default function Header() {
                 getPath === "/settings" && (
                   <Link
                     href="/billing"
-                    className="flex items-center gap-1 text-blackmid dark:text-lightgrey bg-transparent transition-colors hover:text-thirdprop hover:dark:text-white p-2 rounded-md"
+                    className="text-blackmid dark:text-white bg-transparent transition-colors hover:text-purplebtn text-lg font-medium"
                   >
                     Billing
                   </Link>

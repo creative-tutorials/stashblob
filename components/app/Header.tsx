@@ -5,36 +5,24 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { UploadCloud, Command, Search } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
+import { useRouter } from "next/router";
 import { isMobile } from "react-device-detect";
-import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-  useState,
-  useEffect,
-} from "react";
-import { typeUpldState } from "@/types/appx";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 
+import { EventProp } from "@/class/events";
 import LightImage from "@/public/assets/TransparentBlob White.png";
 import DarkImage from "@/public/assets/TransparentBlob Color.png";
 
 type HeaderProp = {
-  uploadFile: (event: ChangeEvent<HTMLInputElement>) => Promise<void>;
   setOpen: Dispatch<SetStateAction<boolean>>;
   open: boolean;
-  uploadState: typeUpldState;
-  setSearchQ: Dispatch<SetStateAction<string>>;
 };
 
-export default function Header({
-  uploadFile,
-  setOpen,
-  open,
-  uploadState,
-  setSearchQ
-}: HeaderProp) {
+export function Header({ setOpen, open }: HeaderProp) {
   const [count, setCount] = useState(0);
   const [isMobileUse, setIsMobileUse] = useState(false);
+  const [textVal, setTextVal] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     setCount((prev) => prev + 1);
@@ -69,44 +57,33 @@ export default function Header({
             alt="forget logo"
           />
         </Link>
-        <span className="relative md:block lg:block hidden">
-        <Search className="w-4 h-4 absolute top-3 left-3 text-hashtext" />
-        <Input type="text" placeholder="Search drive" className="x border-2 border-transparent w-96 p-4 px-10 bg-[#282a2f] focus:bg-transparent focus:border-containerBG placeholder:text-hashtext" onChange={(e) => setSearchQ(e.target.value) } />
-        </span>
-
-      </div>
-      <div className="">
+        {isMobileUse ? null : (
+          <span className="relative md:block lg:block hidden">
+            <Search className="w-4 h-4 absolute top-3 left-3 dark:text-hashtext text-blackmid" />
+            <Input
+              type="text"
+              placeholder="Search drive"
+              className="border-2 border-transparent w-96 p-4 px-10 dark:bg-[#282a2f] bg-hashtext/30 focus:bg-transparent focus:border-elemgf placeholder:dark:text-midwhite placeholder:text-blackmid"
+              disabled={EventProp.event1 === true || EventProp.event2 === true}
+              onChange={(e) => {
+                setTextVal(e.target.value);
+              }}
+              onKeyUp={(e) => {
+                if (e.key === "Enter") {
+                  console.log(textVal);
+                  router.push(`/dashboard/${textVal}`);
+                }
+              }}
+            />
+          </span>
+        )}
       </div>
       <nav className="flex items-center md:gap-4 lg:gap-4 gap-3">
-        {/* account */}
-        <Input
-          id="upload-file"
-          name="mega"
-          type="file"
-          accept="image/png, image/jpg, image/jpeg, image/avif, video/mp4"
-          className="hidden"
-          onChange={uploadFile}
-        />
-        <Label
-          htmlFor="upload-file"
-          className={`${
-            uploadState.isUploading
-              ? "bg-royalblue/30 p-2 md:px-4 lg:px-4 px-2 pointer-events-none border border-blueborder rounded text-white flex items-center gap-1"
-              : "md:bg-royalblue lg:bg-royalblue bg-transparent md:transition-colors lg:transition-colors md:hover:bg-royalblue/60 lg:hover:bg-royalblue/60 p-2 md:px-4 lg:px-4 px-2  cursor-pointer border md:border-blueborder/20 lg:border-blueborder/20 border-transparent rounded text-white flex items-center gap-1"
-          }`}
-        >
-          <UploadCloud className="md:w-auto md:h-auto lg:w-auto lg:h-auto w-6 h-6" />{" "}
-          <span className="md:block lg:block hidden">
-            {uploadState.isUploading
-              ? uploadState.props.uploading
-              : uploadState.props.upload}
-          </span>
-        </Label>
         {isMobileUse ? (
           <Command className="cursor-pointer" onClick={() => setOpen(!open)} />
         ) : (
           <Button
-            className="bg-darkestbg dark:bg-darkbtn hover:bg-thirdprop hover:dark:bg-borderbtm text-white dark:text-white rounded items-center gap-1"
+            className="bg-hashtext/50 dark:bg-darkbtn hover:bg-hashtext/60 hover:dark:bg-borderbtm text-blackmid dark:text-white rounded items-center gap-1"
             onClick={() => setOpen(!open)}
           >
             Menu

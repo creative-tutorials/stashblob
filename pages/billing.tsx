@@ -1,14 +1,17 @@
 import Head from "next/head";
-import { useState, useEffect } from "react";
-import { ColorRing } from "react-loader-spinner";
-import { ExternalLink, Archive, CreditCard, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import Header from "@/components/app/bill/Header";
-import Link from "next/link";
+import { useState, useEffect, Suspense } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import { Toaster } from "@/components/ui/toaster";
+import { Header } from "@/components/app/bill/Header";
 import axios from "axios";
+import { APIURL } from "@/config/apiurl";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/router";
+import { BillingBrk } from "@/components/app/bill/layout/bill-break";
+import { Plans } from "@/components/app/bill/layout/plans";
+import { PlanStats } from "@/components/app/bill/layout/plans/stats";
+import { StorageSense } from "@/components/app/bill/layout/storage";
+import { TailSpinner } from "@/components/app/animation/tail-spin";
 
 type typeBill = {
   status: {
@@ -18,6 +21,7 @@ type typeBill = {
   uploadUsage: {
     total: number;
     used: number;
+    totalString: string;
   };
   sharedUsage: {
     total: number;
@@ -27,12 +31,9 @@ type typeBill = {
 
 export default function Billing() {
   const router = useRouter();
-  const getPath = router.pathname;
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [isrendering, setIsrendering] = useState(false);
-  const [isRendered, setIsRendered] = useState(false);
-  const [renderCount, setRenderCount] = useState(0);
-  const [isBtnClicked, setIsBtnClicked] = useState(false);
+  const [count, setCount] = useState(0);
   const [billObj, setBillObj] = useState<typeBill>({
     status: {
       hasPaid: false,
@@ -41,72 +42,71 @@ export default function Billing() {
     uploadUsage: {
       total: 0,
       used: 0,
+      totalString: "",
     },
     sharedUsage: {
       total: 0,
       used: 0,
     },
   });
-  const { isSignedIn, user, isLoaded } = useUser();
+  const { isSignedIn, user } = useUser();
 
   useEffect(() => {
-    setRenderCount((prev) => prev + 1);
+    setCount((prev) => prev + 1);
 
-    renderCount === 1 && getBillingStatus();
-
-    async function getBillingStatus() {
-      setLoading(true);
-      setIsRendered(false);
-      if (!isLoaded || !isSignedIn) {
-        return null;
-      } else {
-        const userid = user.id;
-        axios
-          .get(`https://s-blob.vercel.app/billing/${userid}`, {
-            headers: {
-              "Content-Type": "application/json",
-              apikey: process.env.NEXT_PUBLIC_API_KEY,
-            },
-          })
-          .then(async function (response) {
-            setLoading(false);
-            setTimeout(() => {
-              setIsrendering(true);
-            }, 1000);
-            setTimeout(() => {
-              setIsrendering(false);
-              setIsRendered(true);
-            }, 2000);
-            setBillObj((prev) => {
-              return {
-                ...prev,
-                status: {
-                  hasPaid: response.data.hasPaid,
-                  amount: response.data.amount,
-                },
-                uploadUsage: {
-                  total: response.data.uploadUsage.total,
-                  used: response.data.uploadUsage.used,
-                },
-                sharedUsage: {
-                  total: response.data.sharedUsage.total,
-                  used: response.data.sharedUsage.used,
-                },
-              };
-            });
-          })
-          .catch(async function (error) {
-            console.error(error.response);
-            setLoading(false);
-            setIsRendered(false);
-          });
-      }
-    }
+    count === 1 && getBillingStatus();
 
     return () => {
-      setRenderCount(0);
+      setCount(0);
     };
-  }, [renderCount, isLoaded, isSignedIn, user?.id, getPath]);
+  }, [count, isSignedIn, user?.id]);
+
+  async function getBillingStatus() {
+    setLoading(true);
+    if (!isSignedIn) {
+      return null;
+    } else {
+      const userid = user.id;
+      axios
+        .get(`${APIURL}/billing/${userid}`, {
+          headers: {
+            "Content-Type": "application/json",
+            apikey: process.env.NEXT_PUBLIC_API_KEY,
+          },
+        })
+        .then(async function (response) {
+          setLoading(false);
+
+          setBillObj((prev) => {
+            return {
+              ...prev,
+              status: {
+                hasPaid: response.data.hasPaid,
+                amount: response.data.amount,
+              },
+              uploadUsage: {
+                total: response.data.uploadUsage.total,
+                used: response.data.uploadUsage.used,
+                totalString: response.data.uploadUsage.totalString,
+              },
+              sharedUsage: {
+                total: response.data.sharedUsage.total,
+                used: response.data.sharedUsage.used,
+              },
+            };
+          });
+        })
+        .catch(async function (error) {
+          console.error(error.response);
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: error.response.data.error,
+          });
+          setLoading(false);
+        });
+    }
+  }
 
   return (
     <>
@@ -134,7 +134,7 @@ export default function Billing() {
         />
         <meta
           property="og:image"
-          content="https://res.cloudinary.com/derbreilm/image/upload/v1693019282/brave_screenshot_localhost_1_hog6fw.png"
+          content="https://res.cloudinary.com/derbreilm/image/upload/v1700921113/Site_Rollup_pk7dop.jpg"
         />
 
         <meta name="twitter:card" content="summary_large_image" />
@@ -147,7 +147,7 @@ export default function Billing() {
         />
         <meta
           name="twitter:image"
-          content="https://res.cloudinary.com/derbreilm/image/upload/v1693019282/brave_screenshot_localhost_1_hog6fw.png"
+          content="https://res.cloudinary.com/derbreilm/image/upload/v1700921113/Site_Rollup_pk7dop.jpg"
         />
 
         <link
@@ -170,163 +170,30 @@ export default function Billing() {
         <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
       </Head>
       <Header />
-      <main className="md:p-10 lg:p-10 p-4 mt-20">
-        <section>
-          <hgroup className="flex flex-col gap-4">
-            <h1 className="md:text-5xl lg:text-5xl text-4xl font-medium dark:text-white text-blackmid font-Noto">
-              Billing
-            </h1>
-            <h3 className="md:text-base lg:text-base text-sm font-normal dark:text-white/70 text-borderbtm font-Noto">
-              Manage your billing and payment details.
-            </h3>
-          </hgroup>
-        </section>
-        <section className="mt-8">
-          <h3 className="md:text-3xl lg:text-3xl text-2xl font-medium dark:text-white text-black">
-            Cloud Usage
-          </h3>
-          <div className="w-full h-full mt-4 flex flex-wrap items-stretch md:gap-14 lg:gap-14 gap-4">
-            {loading ? (
-              <div className="flex w-full items-center justify-center">
-                <ColorRing
-                  visible={true}
-                  height="80"
-                  width="80"
-                  ariaLabel="blocks-loading"
-                  wrapperStyle={{}}
-                  wrapperClass="blocks-wrapper"
-                  colors={[
-                    "#2559c0",
-                    "#a6a6b1",
-                    "#2473c8",
-                    "#749ae4",
-                    "#9C86E8",
-                  ]}
-                />
-              </div>
-            ) : (
-              <>
-                <section className="dark:bg-blackmid bg-hashtext/20 border dark:border-hovergrey border-borderbtm/20 rounded-lg shadow-md p-4 w-full max-w-[43rem] h-auto flex flex-col relative">
-                  <div className="flex flex-wrap md:gap-0 lg:gap-0 gap-4 items-center justify-between">
-                    <hgroup className="flex gap-4">
-                      <p className="dark:text-white text-blackmid text-xl font-medium">
-                        Basic Plan
-                      </p>
-                      <Badge className="dark:bg-[#dfe9f5] bg-[#3864ac] dark:text-[#3864ac] text-[#dfe9f5] py-[0.1rem]">
-                        Free
-                      </Badge>
-                    </hgroup>
-                    <hgroup>
-                      <h2 className="text-4xl font-medium dark:text-midwhite2 text-blackmid">
-                        $0<span className="text-base font-normal">/month</span>
-                      </h2>
-                    </hgroup>
-                  </div>
-                  <div className="md:mt-4 lg:mt-4 mt-6">
-                    <span className="dark:text-midwhite text-hovergrey">
-                      {billObj.uploadUsage.used}% of 2GB used
-                    </span>
-                  </div>
-                  <div className="mt-4 w-full h-auto">
-                    <div className="absolute w-full bottom-12 right-0 dark:bg-[#1a1b1e] bg-borderbtm/20 h-[0.1rem]"></div>
-                    <div className="mt-6 w-full flex items-end justify-end m-auto">
-                      <Link
-                        href="https://timilab.lemonsqueezy.com/checkout"
-                        target="_blank"
-                        className="flex items-center gap-3 transition-all dark:text-linkclr text-royalblue dark:hover:text-fileicon hover:text-royalglue hover:underline"
-                      >
-                        Upgrade plan <ExternalLink className="w-4 h-4" />
-                      </Link>
-                    </div>
-                  </div>
-                </section>
-                <section className="dark:bg-blackmid bg-hashtext/20 border dark:border-hovergrey border-borderbtm/20 rounded-lg shadow-md p-4 w-full max-w-[43rem] h-auto flex flex-col relative overflow-hidden">
-                  <div className="">
-                    <hgroup className="flex gap-4">
-                      <p className="dark:text-white text-blackmid text-xl font-medium">
-                        Shared Files
-                      </p>
-                      <Badge className="dark:bg-[#dfe9f5] bg-[#3864ac] dark:text-[#3864ac] text-[#dfe9f5] py-[0.1rem]">
-                        <Archive />
-                      </Badge>
-                    </hgroup>
-                  </div>
-                  <div className="mt-4">
-                    <span className="dark:text-midwhite2 text-blackmid flex">
-                      <h4 className="text-4xl">{billObj.sharedUsage.used}</h4>{" "}
-                      files shared
-                    </span>
-                  </div>
-                  <div className="absolute right-0 top-0 md:block lg:block hidden">
-                    <svg
-                      // width="217"
-                      // height="217"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="dark:fill-[#80a2e718] fill-darkbtn/30 w-44 h-44"
-                    >
-                      <path d="M22 13.126A6 6 0 0 0 13.303 21H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h7.414l2 2H21a1 1 0 0 1 1 1v7.126ZM18 17v-3.5l5 4.5-5 4.5V19h-3v-2h3Z"></path>
-                    </svg>
-                  </div>
-                </section>
-              </>
-            )}
-          </div>
-        </section>
-        {isrendering && (
-          <div className="flex mt-8 w-full items-center justify-center">
-            <ColorRing
-              visible={true}
-              height="80"
-              width="80"
-              ariaLabel="blocks-loading"
-              wrapperStyle={{}}
-              wrapperClass="blocks-wrapper"
-              colors={["#2559c0", "#a6a6b1", "#2473c8", "#749ae4", "#9C86E8"]}
-            />
-          </div>
-        )}
-        {isRendered && (
-          <section className="mt-8">
-            <div id="payitems" className="flex flex-col gap-4">
-              <hgroup className="flex flex-col gap-2">
-                <h2 className="text-3xl font-medium dark:text-white text-blackmid">
-                  Payment methods
-                </h2>
-                <p className="dark:text-white/70 text-borderbtm">
-                  You can add a payment method to have your subscription renewed
-                  automatically.
-                </p>
-              </hgroup>
-              <div id="paymentgroup">
-                <Button
-                  className="flex items-center gap-2 border border-royalblue hover:border-containerBG"
-                  onClick={() => setIsBtnClicked(true)}
-                >
-                  <CreditCard /> Add credit / debit card
-                </Button>
-              </div>
-              <div id="paystatus">
-                <span>You have no saved payment methods.</span>
-              </div>
-            </div>
-          </section>
-        )}
-        {isBtnClicked && (
-          <div className="w-full h-screen absolute top-0 left-0 bg-thirdprop/30 backdrop-blur-md">
-            <div className="absolute right-10 top-24 z-10" onClick={() => setIsBtnClicked(false)} >
-              <X className="w-8 h-8 text-white cursor-pointer" />
-            </div>
-            <div className="flex items-center justify-center h-full">
-            <iframe
-              src="https://timilab.lemonsqueezy.com/checkout/buy/47120f93-803e-435d-89bd-441482dca0e8?embed=1&dark=1"
-              className="x w-full max-w-lg md:h-full lg:h-full h-[30rem]"
-            ></iframe>
-            </div>
-          </div>
-        )}
+      <main className="md:p-10 lg:p-10 p-4 mt-20 flex flex-col gap-4">
+        <Suspense fallback={<p>Loading...</p>}>
+          <Plans />
+          {loading ? (
+            <TailSpinner />
+          ) : (
+            <>
+              <PlanStats
+                loading={loading}
+                hasPaid={billObj.status.hasPaid}
+                totalString={billObj.uploadUsage.totalString}
+              />
+              <StorageSense />
+              <BillingBrk
+                router={router}
+                loading={loading}
+                totalString={billObj.uploadUsage.totalString}
+                used={billObj.uploadUsage.used}
+              />
+            </>
+          )}
+        </Suspense>
       </main>
+      <Toaster />
     </>
   );
 }
