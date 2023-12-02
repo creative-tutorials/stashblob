@@ -36,10 +36,10 @@ type FileProp = {
   fetchFiles(): Promise<void>;
   states: {
     dataLoading: boolean;
-    setIsFinished: Dispatch<SetStateAction<boolean>>;
-    setIsLoading: Dispatch<SetStateAction<boolean>>;
+    setIsFinished?: Dispatch<SetStateAction<boolean>> | any;
+    setIsLoading?: Dispatch<SetStateAction<boolean>> | any;
     setShow: Dispatch<SetStateAction<boolean>>;
-    setIsShown: Dispatch<SetStateAction<boolean>>;
+    setIsShown?: Dispatch<SetStateAction<boolean>> | any;
   };
 };
 

@@ -163,12 +163,19 @@ export default function FolderRouter() {
                 <Separator className="h-[0.01rem] w-full bg-borderbtm/40 mt-4" />
               </section>
               <section className="mt-4">
-                <Files
+                {/* <Files
                   files={files}
                   dataLoading={dataLoading}
-                  isErr={isErr}
                   fetchFiles={fetchFiles}
                   setShow={setShow}
+                /> */}
+                <Files
+                  files={files}
+                  fetchFiles={fetchFiles}
+                  states={{
+                    dataLoading,
+                    setShow,
+                  }}
                 />
               </section>
             </div>
