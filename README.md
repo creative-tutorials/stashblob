@@ -1,37 +1,20 @@
 <div align="center">
 
-![StashBlob mini logo](public/apple-touch-icon.png)
-
-### StashBlob
-
-Upload. Optimize. Share
-
-[Documentation](https://post-io.gitbook.io/stashblob-docs) [Changelog](https://stashblobweb.vercel.app/changelog)
-
+ <img src="https://github.com/creative-tutorials/stashblob/assets/68476321/01bf3798-5f03-4d04-8456-bf635b9dd4a0" alt="logo" width="320" />
 </div>
 
-## StashBlob
+<div align="center">
 
-StashBlob is a cloud storage provider that gives user controls over thier own files to upload and share files faster.
+  [Home](https://stashblobweb.vercel.app) [Docs](https://stashblobweb.vercel.app/docs)
+</div>
 
-## Upload
 
-We allow you to upload files faster and easier. With our simple and fast upload stream, we give you a fast uploading experience throught the app.
+## Developer's Kit
 
-## Optimize
+Packed developer's kit to get your file storage app up and running.
 
-Optimization is built into images, which means every image you upload, we would optimize them for you. So a slightly blury images would be optimized by 50-100%.
+- [Next.js App Directory](https://timi.gitbook.io/stashblob-docs/getting-started/appdir) - Simple Project using the Next.js app directory
+- [Next.js Pages Directory](https://timi.gitbook.io/stashblob-docs/getting-started/pagedir) - Simple Project using the Next.js pages directory
+- [Express](https://timi.gitbook.io/stashblob-docs/backend-adapters/express) - Simple Project using Express.js 
 
-## Share
-
-For every files you upload, we have the power to share them with your friends and beyond.
-
-## Contributing
-
-You feel eager to contribute on this? Seek our [Contributing Guidelines](/CONTRIBUTING.md) for more details.
-
-## Reference
-
-- [Code of Conduct](/CODE_OF_CONDUCT.md)
-- [Contributing Guidelines](/CONTRIBUTING.md)
-- [MIT License](/LICENSE)
+[Report an Issue](https://github.com/creative-tutorials/stashblob/issues/new/choose)
