@@ -235,7 +235,7 @@ export function Files({ files, fetchFiles, states }: FileProp) {
         <Loader />
       ) : (
         <>
-          <Table className="">
+          <Table className=" whitespace-nowrap overflow-auto">
             <TableHeader>
               <TableRow className="border border-transparent dark:border-b-borderbtm/80 border-b-hashtext ">
                 <TableHead className="dark:text-white">Name</TableHead>

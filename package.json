@@ -1,6 +1,6 @@
 {
   "name": "stashblob",
-  "version": "2.14.3",
+  "version": "2.15.3",
   "private": true,
   "scripts": {
     "dev": "next dev",
